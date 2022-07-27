@@ -1,0 +1,11 @@
+Data/*
+!Data/*-master.dat
+
+Configs/*
+!Configs/*-template.cfg
+
+Results
+
+Setup/*-run.sh
+Setup/*-n.txt
+Setup/*-k.txt

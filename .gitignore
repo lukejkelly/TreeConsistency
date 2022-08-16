@@ -1,11 +1,6 @@
-Data/*
-!Data/*-master.dat
-
-Configs/*
-!Configs/*-template.cfg
-
+Data
+Configs
+Figs
 Results
 
 Setup/*-run.sh
-Setup/*-n.txt
-Setup/*-k.txt

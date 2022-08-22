@@ -1,6 +1,5 @@
-Data
-Configs
-Figs
-Results
-
-Setup/*-run.sh
+data
+configs
+run
+out
+figs

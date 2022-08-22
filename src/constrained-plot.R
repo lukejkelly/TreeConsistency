@@ -5,7 +5,7 @@ library("tidyr")
 library("scales")
 library("ggplot2")
 
-source("Setup/finitesites-pars.R")
+source("src/finitesites-pars.R")
 
 burnin <- 0
 leaf_inds <- 1:n
@@ -22,7 +22,7 @@ leaf_labels <- function(x) {
 for (j in seq_along(k_seq)) {
     k <- k_seq[j]
     out_k <- read_delim(
-        sprintf("Results/finitesites-%i.txt", k),
+        sprintf("out/constrained-%i.txt", k),
         delim = " ",
         col_names = FALSE,
         col_types = cols(.default = "i"),
@@ -60,4 +60,4 @@ fig <- fcp |>
         title = "support for first coalescent pair as number of sites increases"
     ) +
     theme_light()
-ggsave("Figs/finitesites-splits.pdf", fig)
+ggsave("figs/constrained.pdf", fig)

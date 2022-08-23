@@ -7,7 +7,6 @@ library("ggplot2")
 
 source("src/finitesites-pars.R")
 
-burnin <- 0
 leaf_inds <- 1:n
 merg_inds <- 2 * n
 
@@ -57,7 +56,7 @@ fig <- fcp |>
         x = "number of sites k",
         y = "posterior support",
         fill = NULL,
-        title = "support for first coalescent pair as number of sites increases"
+        title = "posterior on first coalescent pair"
     ) +
     theme_light()
 ggsave("figs/constrained.pdf", fig)

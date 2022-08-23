@@ -9,5 +9,6 @@ for R_LIBRARY in $(grep 'library(' src/*.R); do
 done
 
 R -e 'install.packages(c(
-    "purrr", "tidyr", "scales", "ggplot2", "readr", "dplyr", "stringr", "ape"
+    "purrr", "tidyr", "scales", "ggplot2", "readr", "dplyr", "stringr", "ape",
+    "magrittr"
 ))'

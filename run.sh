@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # constrained
 R -f src/constrained-setup.r
 bash run/constrained.sh

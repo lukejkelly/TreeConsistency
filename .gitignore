@@ -1,5 +1,5 @@
-data
-configs
-run
-out
-figs
+data/
+configs/
+run/
+out/
+figs/

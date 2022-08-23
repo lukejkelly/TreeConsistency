@@ -25,7 +25,7 @@ for (k in k_seq) {
 }
 
 # configs
-config_template <- read_file("src/finitesites-template.cfg")
+config_template <- read_file("src/constrained-template.cfg")
 for (k in k_seq) {
     config_k <- str_replace(config_template, "XYZ", as.character(k))
     write_file(

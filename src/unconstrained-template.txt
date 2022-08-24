@@ -1,0 +1,6 @@
+set autoclose=yes nowarn=yes;
+execute data/unconstrained-XYZ.nex;
+lset coding=all nst=1 rates=equal;
+prset brlenspr=unconstrained:exponential(1) statefreqpr=fixed(equal);
+mcmc ngen=1000000 samplefreq=1 nruns=1 printfreq=100000 mcmcdiagn=no file=out/unconstrained-XYZ checkpoint=no;
+quit;

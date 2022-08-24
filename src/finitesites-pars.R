@@ -1,8 +1,6 @@
-# helper functions
-
 # data parameters
 n <- 4
-k_seq <- 2^seq.int(1, log2(1024))
+k_seq <- 2^seq_len(log2(1024))
 
 # analysis parameters
 burnin <- 0

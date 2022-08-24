@@ -1,6 +1,5 @@
 library("readr")
 library("dplyr")
-# library("purrr")
 library("magrittr")
 library("tidyr")
 library("scales")
@@ -30,7 +29,7 @@ for (j in seq_along(k_seq)) {
             t_k2 <- tip_labels[-spl_k_i] |> sort() |> paste(collapse = ",")
             spl_names[i] <- c(t_k1, t_k2) |>
                 sort() |>
-                paste(collapse = "|")
+                paste(collapse = " | ")
         }
     }
     spl_freqs <- attr(spl_k, "number") / n_samp
@@ -58,5 +57,6 @@ fig <- fcp |>
         fill = NULL,
         title = "posterior on splits"
     ) +
-    theme_light()
-ggsave("figs/unconstrained.pdf", fig)
+    theme_classic() +
+    scale_fill_brewer()
+ggsave("figs/unconstrained.pdf", fig, width = 8, height = 3)

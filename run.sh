@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# constrained
+echo "constrained analyses"
 R -f src/constrained-setup.r
 bash run/constrained.sh
 R -f src/constrained-plot.r
 
-# unconstrained
+echo "unconstrained analyses"
 R -f src/unconstrained-setup.r
 bash run/unconstrained.sh
 R -f src/unconstrained-plot.r

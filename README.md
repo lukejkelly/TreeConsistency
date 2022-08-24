@@ -5,11 +5,14 @@ Working directory is `Tree-Consistency` in a folder containing
 ```
 Tree-Consistency/
 tree-zig-zag/
-beast/
 ```
-Ensure that tree-zig-zag MCMC code is compiled
-```bash
-(cd ../tree-zig-zag/Metropolis/Finite_Sites; make)
+and that `mb` (MrBayes) is available
+
+Install R packages
+```R
+install.packages(c(
+    "ape", "dplyr", "ggplot2", "magrittr", "purrr", "readr", "scales", "stringr", "tidyr"
+))
 ```
 
 ## Analyses

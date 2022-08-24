@@ -13,7 +13,7 @@ merg_inds <- 2 * n
 # convert logical to leaf indices
 leaf_labels <- function(x) {
     y <- unlist(x, use.names = FALSE) |> which()
-    leaf_labs <- sprintf("(%i, %i)", y[1], y[2])
+    leaf_labs <- sprintf("%i, %i", y[1], y[2])
     return(leaf_labs)
 }
 
@@ -58,5 +58,6 @@ fig <- fcp |>
         fill = NULL,
         title = "posterior on first coalescent pair"
     ) +
-    theme_light()
-ggsave("figs/constrained.pdf", fig)
+    theme_classic() +
+    scale_fill_brewer()
+ggsave("figs/constrained.pdf", fig, width = 8, height = 3)

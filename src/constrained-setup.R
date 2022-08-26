@@ -14,8 +14,7 @@ t <- read_delim(
 )
 
 for (k in k_seq) {
-    s_k <- t[, seq_len(k)]
-    t_k <- s_k |> group_by_all() |> count()
+    t_k <- t[, seq_len(k)] |> bind_cols(n = 1)
     write_delim(
         t_k,
         sprintf("data/constrained-%s.dat", k),

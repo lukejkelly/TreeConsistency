@@ -13,7 +13,7 @@ merg_inds <- 2 * n
 # convert logical to leaf indices
 leaf_labels <- function(x) {
     y <- unlist(x, use.names = FALSE) |> which()
-    leaf_labs <- sprintf("%i, %i", y[1], y[2])
+    leaf_labs <- sprintf("%i,%i", y[1], y[2])
     return(leaf_labs)
 }
 
@@ -53,10 +53,10 @@ fig <- fcp |>
     geom_area() +
     scale_x_continuous(breaks = k_seq, trans = "log2") +
     labs(
-        x = "number of sites k",
-        y = "posterior support",
+        x = "Number of sites k",
+        y = "Posterior support",
         fill = NULL,
-        title = "posterior on first coalescent pair"
+        title = "Posterior on first coalescent pair"
     ) +
     theme_classic() +
     scale_fill_brewer()

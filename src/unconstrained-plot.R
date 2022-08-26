@@ -52,10 +52,10 @@ fig <- fcp |>
     geom_area() +
     scale_x_continuous(breaks = k_seq, trans = "log2") +
     labs(
-        x = "number of sites k",
-        y = "posterior support",
+        x = "Number of sites k",
+        y = "Posterior support",
         fill = NULL,
-        title = "posterior on splits"
+        title = "Posterior on splits"
     ) +
     theme_classic() +
     scale_fill_brewer()

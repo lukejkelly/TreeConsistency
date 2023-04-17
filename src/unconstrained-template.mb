@@ -1,0 +1,23 @@
+set autoclose=yes;
+set nowarn=yes;
+
+execute data/finitesites-XYZ.nex;
+
+lset coding=all;
+lset nst=1;
+lset rates=equal;
+
+prset brlenspr=unconstrained:exponential(1);
+prset statefreqpr=fixed(equal);
+
+mcmcp ngen=1000000;
+mcmcp samplefreq=100;
+mcmcp nruns=1;
+mcmcp printfreq=100000;
+mcmcp mcmcdiagn=no;
+mcmcp file=out/unconstrained-XYZ;
+mcmcp checkpoint=no;
+
+mcmc;
+
+quit;

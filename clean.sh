@@ -1,3 +1,2 @@
-#!/bin/bash
-
-rm -rf data configs run out figs
+# delete all created files and folders
+rm -rf trees data configs out figs

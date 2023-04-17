@@ -1,14 +1,13 @@
 # Posterior consistency as number of sites increases
+Fit constrained and unconstrained phylogenetic models to synthetic data at `4, 8, 16, ..., N` taxa with `1, 2, 4, 8, ..., K` sites.
 
 ## Requirements
-Working directory is `Tree-Consistency` in a folder containing
-```
-Tree-Consistency/
-tree-zig-zag/
-```
-and that `mb` (MrBayes) is available
 
-Install R packages
+The working directory is the top level of `Tree-Consistency`.
+
+The simulations require that `mb` (MrBayes) is available on the command line.
+
+The setup and figures code require that `R` is available on the command line and use the following R packages.
 ```R
 install.packages(c(
     "ape", "dplyr", "ggplot2", "magrittr", "purrr", "readr", "scales", "stringr", "tidyr"
@@ -16,8 +15,21 @@ install.packages(c(
 ```
 
 ## Analyses
+1) Sample a tree with `N = 32` leaves and binary data at `K = 2^12` sites from a finite sites model with mutation rate `4` and store in
 ```bash
-bash init.sh  # to set up directories and install R packages
-bash run.sh   # to generate data sets, run experiments and make figures
-bash clean.sh # to delete all the directories created by the above scripts
+bash data.sh 32 4096 1
+```
+2) Set up directories and construct data and config files for each experiment. For the runs with `n < N` taxa, we use a random subsample of the taxa and store the corresponding subtree.
+```bash
+bash init.sh  
+```
+Step 2 onwards can be undone by executing `bash clean.sh`.
+
+3) Run all the experiments.
+```bash
+bash run.sh   
+```
+4) Create figures for the constrained and unconstrained experiments.
+```bash
+bash plot.sh
 ```

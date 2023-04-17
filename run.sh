@@ -1,7 +1,7 @@
-#!/bin/bash
-
-bash run/constrained.sh
-R -f src/constrained-plot.r
-
-bash run/unconstrained.sh
-R -f src/unconstrained-plot.r
+# run mrbayes on each file in configs/
+for FILE in configs/un*; do
+    FILENAME=$(basename "$FILE")
+    FILESTEM=${FILENAME/.mb/}
+    echo starting ${FILESTEM//-/ } at $(date)
+    mb configs/"$FILESTEM".mb > out/"$FILESTEM".log
+done

@@ -5,7 +5,7 @@ library("tidyr")
 library("scales")
 library("ggplot2")
 
-source("src/finitesites-pars.R")
+source(file.path("src", "finitesites-pars.R"))
 
 leaf_inds <- 1:n
 merg_inds <- 2 * n
@@ -21,7 +21,7 @@ leaf_labels <- function(x) {
 for (j in seq_along(k_seq)) {
     k <- k_seq[j]
     out_k <- read_delim(
-        sprintf("out/constrained-%i.txt", k),
+        file.path("out", sprintf("constrained-%i.txt", k)),
         delim = " ",
         col_names = FALSE,
         col_types = cols(.default = "i"),
@@ -60,4 +60,4 @@ fig <- fcp |>
     ) +
     theme_classic() +
     scale_fill_brewer()
-ggsave("figs/constrained.pdf", fig, width = 8, height = 3)
+ggsave(file.path("figs", "constrained.pdf"), fig, width = 8, height = 3)

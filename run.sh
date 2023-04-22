@@ -1,5 +1,5 @@
 # run mrbayes on each file in configs/
-for FILE in configs/un*; do
+for FILE in configs/*; do
     FILENAME=$(basename "$FILE")
     FILESTEM=${FILENAME/.mb/}
     echo starting ${FILESTEM//-/ } at $(date)

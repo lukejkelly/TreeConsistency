@@ -14,10 +14,9 @@ for (i in seq_len(nrow(out))) {
     k <- out$k[i]
 
     tree0 <- file.path("trees", sprintf("finitesites-n%s.nex", n)) |>
-        ape::read.nexus() |>
-        ape::unroot()
+        ape::read.nexus()
 
-    trees <- file.path("out", sprintf("unconstrained-n%s-k%s.t", n, k)) |>
+    trees <- file.path("out", sprintf("constrained-n%s-k%s.t", n, k)) |>
         ape::read.nexus() |>
         magrittr::extract(-seq_len(1 + burnin))
 
@@ -36,7 +35,7 @@ fig <- out |>
         x = "Number of sites k",
         y = "Posterior mass",
         color = "Number of taxa n",
-        title = "Posterior support for true unrooted topology"
+        title = "Posterior support for true rooted topology"
     ) +
     theme_classic()
-ggsave(file.path("figs", "unconstrained.pdf"), fig, width = 8, height = 3)
+ggsave(file.path("figs", "constrained.pdf"), fig, width = 8, height = 3)

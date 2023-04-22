@@ -5,12 +5,11 @@ Fit constrained and unconstrained phylogenetic models to synthetic data at `4, 8
 
 The working directory is the top level of `Tree-Consistency`.
 
-The simulations require that `mb` (MrBayes) is available on the command line.
-
-The setup and figures code require that `R` is available on the command line and use the following R packages.
+The simulations require that `mb` (MrBayes) and `R` are available on the command line.
+Install the following R packages:
 ```R
 install.packages(c(
-    "ape", "dplyr", "ggplot2", "magrittr", "purrr", "readr", "scales", "stringr", "tidyr"
+    "ape", "castor", "dplyr", "magrittr", "phangorn", "purrr", "readr", "stringr", "svMisc", "tibble", "tidyr"
 ))
 ```
 

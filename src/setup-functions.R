@@ -4,7 +4,7 @@ write_tree <- function(tree, taxa, n) {
     sub_taxa <- taxa[seq_len(n)]
     sub_tree <- castor::get_subtree_with_tips(tree, sub_taxa) |>
         purrr::pluck("subtree")
-    write.nexus(
+    ape::write.nexus(
         sub_tree,
         file = file.path("trees", sprintf("finitesites-n%s.nex", n)),
         translate = FALSE

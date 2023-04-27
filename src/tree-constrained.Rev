@@ -1,0 +1,12 @@
+# coalescent tree prior and associated mcmc moves
+theta <- 1
+tree ~ dnCoalescent(theta=theta, taxa=taxa)
+
+moves.append( mvNNI(tree) )
+moves.append( mvNodeTimeScale(tree) )
+moves.append( mvSubtreeScale(tree) )
+moves.append( mvTreeScale(tree) )
+moves.append( mvNarrow(tree) )
+moves.append( mvFNPR(tree) )
+moves.append( mvNodeTimeSlideUniform(tree) )
+moves.append( mvRootTimeScaleBactrian(tree) )

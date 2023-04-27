@@ -1,3 +1,3 @@
-# make figures
-R -f src/constrained-plot.r
-R -f src/unconstrained-plot.r
+# make figures and save to figs/
+R -f src/plot-constrained.R
+R -f src/plot-unconstrained.R

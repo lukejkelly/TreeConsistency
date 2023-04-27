@@ -1,7 +1,4 @@
-# run mrbayes on each file in configs/
+# run revbayes on each file in configs/
 for FILE in configs/*; do
-    FILENAME=$(basename "$FILE")
-    FILESTEM=${FILENAME/.mb/}
-    echo starting ${FILESTEM//-/ } at $(date)
-    mb configs/"$FILESTEM".mb > out/"$FILESTEM".log
+    rb --file $FILE
 done

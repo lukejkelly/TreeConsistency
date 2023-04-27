@@ -1,32 +1,23 @@
-# sample a coalescent tree with n leaves then generate data at k sites from a
+# sample trees with n = 4, 8, ..., N leaves then generate data at K sites from a
 # JC69 model with mutation rate mu
 
+source(file.path("src", "generate-functions.R"))
+
 args = commandArgs(trailingOnly = TRUE)
-if (length(args) != 3) {
-    stop("R -f src/generate-data.R --args n_taxa n_sites r_mutation")
+if (length(args) != 4) {
+    stop("R -f src/generate-data.R --args tree_type n_taxa n_sites r_mutation")
 }
-N <- as.integer(args[1])
-K <- as.integer(args[2])
-mu <- as.double(args[3])
+s <- args[1]
+N <- as.integer(args[2])
+K <- as.integer(args[3])
+mu <- as.double(args[4])
 
 readr::write_lines(
-    list(paste("N <- ", N), paste("K <- ", K), paste("mu <-", mu)),
-    file = "finitesites-pars.R"
+    list(paste("N <-", N), paste("K <-", K), paste("mu <-", mu)),
+    file = file.path("pars", sprintf("%s.R", s))
 )
 
-tree <- ape::rcoal(N)
-ape::write.nexus(tree, file = "finitesites-tree.nex", translate = FALSE)
-
-alleles <- phangorn::simSeq(
-    tree,
-    l = K,
-    type = "USER",
-    levels = c("0", "1"),
-    rate = mu
-)
-temp_file <- tempfile()
-phangorn::write.phyDat(alleles, temp_file, "nexus", "USER")
-data_file <- temp_file |>
-    readr::read_file() |>
-    stringr::str_remove("symbols=\"0123456789\"")
-readr::write_file(data_file, "finitesites-data.nex")
+source(file.path("src", "sequences.R"))
+for (n in n_seq) {
+    sample_tree_data(s, n, K, mu)
+}

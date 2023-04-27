@@ -1,43 +1,47 @@
-# helper functions for writing (sub)tree, data and config files
+# helper functions for writing data and config files
 
-write_tree <- function(tree, taxa, n) {
-    sub_taxa <- taxa[seq_len(n)]
-    sub_tree <- castor::get_subtree_with_tips(tree, sub_taxa) |>
-        purrr::pluck("subtree")
-    ape::write.nexus(
-        sub_tree,
-        file = file.path("trees", sprintf("finitesites-n%s.nex", n)),
-        translate = FALSE
-    )
-    return(NULL)
-}
-
-write_data <- function(alleles, n, k) {
-    alleles_nk <- alleles |>
-        dplyr::select(seq_len(n)) |>
-        dplyr::slice(seq_len(k))
+write_data <- function(alleles, s, n, k) {
+    alleles_k <- alleles |>
+        purrr::map(magrittr::extract, seq_len(k))
     temp_file <- tempfile()
-    ape::write.nexus.data(alleles_nk, temp_file, format = "standard")
+    ape::write.nexus.data(alleles_k, temp_file, format = "standard")
     data_file <- temp_file |>
         readr::read_file() |>
-        stringr::str_remove("symbols=\"0123456789\"")
+        stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
         data_file,
-        file.path("data", sprintf("finitesites-n%s-k%s.nex", n, k))
+        file.path("data", sprintf("%s-n%s-k%s.nex", s, n, k))
     )
     return(NULL)
 }
 
-write_config <- function(s, n, k) {
-    config <- readr::read_file(file.path("src", sprintf("%s-template.mb", s)))
-    config_nk <- stringr::str_replace_all(
-        config,
-        "XYZ",
-        sprintf("n%s-k%s", n, k)
-    )
+write_config <- function(s, n, k, mu) {
+    config_template <- file.path("src", "config-template.Rev") |>
+        readr::read_file()
+    config <- config_template |>
+        stringr::str_replace(
+            "_PATH_TO_DATA_",
+            file.path("data", sprintf("%s-n%s-k%s.nex", s, n, k))
+        ) |>
+        stringr::str_replace(
+            "_PATH_TO_TREE_PRIOR_",
+            file.path("src", sprintf("tree-%s.Rev", s))
+        ) |>
+        stringr::str_replace(
+            "_MUTATION_RATE_",
+            as.character(mu)
+        ) |>
+        stringr::str_replace(
+            "_PATH_TO_LOG_",
+            file.path("out", sprintf("%s-n%s-k%s.log", s, n, k))
+        ) |>
+        stringr::str_replace(
+            "_PATH_TO_SAMPLED_TREES_",
+            file.path("out", sprintf("%s-n%s-k%s.t", s, n, k))
+        )
     readr::write_file(
-        config_nk,
-        file.path("configs", sprintf("%s-n%s-k%s.mb", s, n, k))
+        config,
+        file.path("configs", sprintf("%s-n%s-k%s.Rev", s, n, k))
     )
     return(NULL)
 }

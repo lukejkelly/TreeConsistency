@@ -1,0 +1,46 @@
+# data
+alleles <- readDiscreteCharacterData("_PATH_TO_DATA_")
+taxa <- alleles.names()
+
+# allocate moves and monitors
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+# tree prior
+source("_PATH_TO_TREE_PRIOR_")
+
+# observation model
+Q <- fnJC(2)
+mu <- _MUTATION_RATE_
+phylogeneticModel ~ dnPhyloCTMC(tree=tree, Q=Q, branchRates=mu, type="Binary")
+phylogeneticModel.clamp(alleles)
+
+# summaries to record in mcmc
+monitors.append(
+    mnModel(
+        filename="_PATH_TO_LOG_",
+        printgen=1e2
+    )
+)
+monitors.append(
+    mnFile(
+        tree,
+        posterior=FALSE,
+        likelihood=FALSE,
+        prior=FALSE,
+        filename="_PATH_TO_SAMPLED_TREES_",
+        printgen=1e2
+    )
+)
+monitors.append( mnScreen(printgen=1e4) )
+
+# initialize the mcmc object
+modelObj = model(tree)
+mcmcObj = mcmc(modelObj, monitors, moves)
+mcmcObj.burnin(generations=1e4, tuningInterval=5e3)
+
+# main analysis
+mcmcObj.run(generations=1e5)
+
+# quit
+q()

@@ -23,11 +23,16 @@ for (i in seq_len(nrow(out))) {
 fig <- out |>
     ggplot(aes(x = k, y = p, color = as.factor(n))) +
     geom_line() +
-    scale_x_continuous(breaks = k_seq, trans = "log2") +
+    scale_x_continuous(
+        breaks = k_seq,
+        trans = scales::log_trans(2),
+        labels = scales::label_log(2)
+    ) +
     labs(
         x = "k",
         y = latex2exp::TeX("$ \\Pi^K(T_0 | bold(a)_1, ldots, bold(a)_k) $"),
         color = "n"
     ) +
-    theme_classic()
+    theme_classic() +
+    theme(legend.title.align = 0.5)
 ggsave(file.path("figs", "constrained.pdf"), fig, width = 8, height = 3)

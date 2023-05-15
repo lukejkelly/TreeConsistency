@@ -32,7 +32,7 @@ fig <- out |>
     ) +
     labs(
         x = "k",
-        y = latex2exp::TeX("$ \\Pi^U(T_0 | bold(a)_1, ldots, bold(a)_k) $"),
+        y = latex2exp::TeX("$ \\Pi^{U,n}(T_0 | bold(a)_1, ldots, bold(a)_k) $"),
         color = "n"
     ) +
     theme_classic() +

@@ -1,22 +1,23 @@
 # Posterior consistency as number of sites increases
-Simulate from the posterior distribution of constrained and unconstrained phylogenetic trees on `4, 5, ..., N` taxa with synthetic data at `4, 16, ..., K` sites.
+Simulate from the posterior distribution of constrained and unconstrained phylogenetic trees on `4, 5, ..., N` taxa with synthetic data at `4, 16, ..., 4^K` sites.
 
 ## Requirements
 
 The working directory is the top level of `Tree-Consistency`.
 
-The simulations require that `rb` (RevBayes) and `R` are available on the command line.
-Install the following R packages:
+The simulations require that `bash`, `rb` ([RevBayes](https://revbayes.github.io)) and `R` are available on the command line.
+
+Install the necessary R packages:
 ```R
 install.packages(c(
-    "ape", "castor", "dplyr", "latex2exp", "magrittr", "phangorn", "purrr", "readr", "stringr", "svMisc", "tibble", "tidyr"
+    "ape", "castor", "dplyr", "latex2exp", "magrittr", "phangorn", "purrr", "readr", "stringr", "svMisc", "tibble", "tidyr", "TreeTools"
 ))
 ```
 
 ## Analyses
 1) Sample rooted and unrooted trees with `N = 10` leaves then simulate binary data at `K = 2^12` sites from a Jukes–Cantor model with mutation rate `1`.
 ```bash
-bash data.sh 1 4096 1
+bash data.sh 10 12 1
 ```
 The trees are written to `trees` and the data to `data`.
 

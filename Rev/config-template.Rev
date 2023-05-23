@@ -6,7 +6,7 @@ taxa <- alleles.names()
 moves = VectorMoves()
 monitors = VectorMonitors()
 
-# tree prior
+# tree prior and associated moves
 source("_PATH_TO_TREE_PRIOR_")
 
 # observation model

@@ -5,7 +5,8 @@ write_data <- function(alleles, s, n, k) {
         purrr::map(magrittr::extract, seq_len(k))
     temp_file <- tempfile()
     ape::write.nexus.data(alleles_k, temp_file, format = "standard")
-    data_file <- temp_file |>
+    data_file <-
+        temp_file |>
         readr::read_file() |>
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
@@ -16,8 +17,7 @@ write_data <- function(alleles, s, n, k) {
 }
 
 write_config <- function(s, n, k, mu) {
-    config_template <- file.path("src", "config-template.Rev") |>
-        readr::read_file()
+    config_template <- readr::read_file(file.path("Rev", "config-template.Rev"))
     config <- config_template |>
         stringr::str_replace(
             "_PATH_TO_DATA_",
@@ -25,7 +25,7 @@ write_config <- function(s, n, k, mu) {
         ) |>
         stringr::str_replace(
             "_PATH_TO_TREE_PRIOR_",
-            file.path("src", sprintf("tree-%s.Rev", s))
+            file.path("Rev", sprintf("tree-%s.Rev", s))
         ) |>
         stringr::str_replace(
             "_MUTATION_RATE_",

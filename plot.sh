@@ -1,3 +1,3 @@
 # make figures and save to figs/
-R -f src/plot-constrained.R
-R -f src/plot-unconstrained.R
+R -f R/plot-kingman.R
+R -f R/plot-uniform.R

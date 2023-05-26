@@ -7,6 +7,7 @@ N <- as.integer(args[1])
 J <- as.integer(args[2])
 mu <- as.double(args[3])
 
+source(file.path("R", "utilities.R"))
 source(file.path("R", "generate-utilities.R"))
 
 write_pars(N, J, mu, "uniform")
@@ -15,7 +16,7 @@ n <- 4
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)
 write_tree(tree, "uniform")
 
-K <- 2^J
+K <- J |> k_seq() |> dplyr::last()
 alleles <-
     phangorn::simSeq(
         tree,

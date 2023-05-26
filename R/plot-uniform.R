@@ -27,8 +27,8 @@ fig <- out |>
     geom_line() +
     scale_x_continuous(
         breaks = k_seq(J),
-        trans = scales::log_trans(2),
-        labels = scales::label_log(2)
+        trans = scales::log10_trans(),
+        labels = scales::label_log(10)
     ) +
     labs(
         x = "k",

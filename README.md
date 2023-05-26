@@ -1,5 +1,5 @@
 # Posterior consistency as number of sites increases
-Simulate from the posterior distribution of constrained and unconstrained phylogenetic trees on `4, 5, ..., N` taxa with synthetic data at `2^2, 2^4, ..., 4^J` sites.
+Analyse posterior support for true tree topology in coupled synthetic problems as the number of taxa and sequence length increase.
 
 ## Requirements
 
@@ -10,7 +10,7 @@ The simulations require that `bash`, `R` and `rb` ([RevBayes](https://revbayes.g
 Install the necessary R packages via `bash requirements.sh`.
 
 ## Analyses
-1) Sample rooted (Kingman's coalescent) and unrooted (uniform across topologies, exponential branch lengths) trees with `n = 4, 5, ..., N` leaves then simulate binary data sets at `K = 2^J` sites from a Jukes–Cantor model with mutation rate `mu`:
+1) Sample rooted (Kingman's coalescent) and unrooted (uniform across topologies, exponential branch lengths) trees with `n = 4, 5, ..., N` leaves then simulate binary data sets at `K = 10^J` sites from a Jukes–Cantor model with mutation rate `mu`:
 ```bash
 bash data.sh N J mu
 ```
@@ -23,18 +23,19 @@ The trees are built sequentially and data sets are coupled by advancing the muta
 bash setup.sh  
 ```
 The default is to only run experiments on trees with `n = 4, 7, ..., N` sites.
-For each tree, we infer its posterior using the first `k = 2^1, 2^2, ..., 2^J` sites at each taxon.
-*Note:* These sequences may be changed by editing `R/utilities.R`.
+For each tree, we infer its posterior using the first `k = 10^0, 10^1, ..., 10^J` sites at each taxon.
+
+*These sequences may be changed by editing `R/utilities.R` and the axis scales in `R/plot-{kingman,uniform}.R`.*
 
 3) Use RevBayes to draw samples from the posterior in each experiment:
 ```bash
 bash run.sh   
 ```
-Edit the templates in `Rev` to change run parameters.
+*Edit the templates in `Rev` to change run parameters.*
 
 4) Create figures for the rooted and unrooted experiments:
 ```bash
 bash plot.sh
 ```
 
-*Note:* The files created by steps 1–4 can be removed by executing `bash clean.sh`.
+**Note:** The files created by steps 1–4 can be removed by executing `bash clean.sh`.

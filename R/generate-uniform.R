@@ -1,32 +1,32 @@
-# sequentially build trees with n = 4, 5, ..., N leaves with a uniform
-# distribution across branch topologies and exponential branch lengths then
-# generate coupled data at K sites from a JC69 model with mutation rate mu
+# sequentially build unrooted trees with n = n_seq leaves with a uniform
+# distribution across topologies and exponential branch lengths then generate
+# coupled sequences at K = max(k_seq) sites from a JC69 model with mutation
+# rates m_seq
 
-args <- commandArgs(trailingOnly = TRUE)
-N <- as.integer(args[1])
-J <- as.integer(args[2])
-mu <- as.double(args[3])
-
-source(file.path("R", "utilities.R"))
+source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 
-write_pars(N, J, mu, "uniform")
+N <- dplyr::last(n_seq)
+K <- dplyr::last(k_seq)
 
 n <- 4
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)
 write_tree(tree, "uniform")
 
-K <- J |> k_seq() |> dplyr::last()
-alleles <-
-    phangorn::simSeq(
-        tree,
-        l = K,
-        type = "USER",
-        levels = c("0", "1"),
-        rate = mu
-    ) |>
-    as.data.frame()
-write_alleles(alleles, "uniform")
+alleles <- vector(mode = "list", length = length(m_seq))
+for (j in seq_along(m_seq)) {
+    mu <- m_seq[j]
+    alleles[[j]] <-
+        phangorn::simSeq(
+            tree,
+            l = K,
+            type = "USER",
+            levels = c("0", "1"),
+            rate = mu
+        ) |>
+        as.data.frame()
+    write_alleles(alleles[[j]], "uniform", mu)
+}
 
 while (n < N) {
     i1 <- sample(tree$tip.label, 1)
@@ -38,10 +38,12 @@ while (n < N) {
         extend_leaves(c(i1, i2), x)
     write_tree(tree, "uniform")
 
-    alleles <- alleles |>
-        duplicate_alleles(i1, i2) |>
-        mutate_alleles(c(i1, i2), mu * x)
-    write_alleles(alleles, "uniform")
-
+    for (j in seq_along(m_seq)) {
+        mu <- m_seq[j]
+        alleles[[j]] <- alleles[[j]] |>
+            duplicate_alleles(i1, i2) |>
+            mutate_alleles(c(i1, i2), mu * x)
+        write_alleles(alleles[[j]], "uniform", mu)
+    }
     n <- n + 1
 }

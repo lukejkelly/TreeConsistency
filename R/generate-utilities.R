@@ -1,12 +1,12 @@
 # helper function for simulating trees and data
 
-write_pars <- function(N, J, mu, s) {
-    readr::write_lines(
-        list(paste("N <-", N), paste("J <-", J), paste("mu <-", mu)),
-        file = file.path("pars", sprintf("%s.R", s))
-    )
-    return(NULL)
-}
+# write_pars <- function(N, J, mu, s) {
+#     readr::write_lines(
+#         list(paste("N <-", N), paste("J <-", J), paste("mu <-", mu)),
+#         file = file.path("pars", sprintf("%s.R", s))
+#     )
+#     return(NULL)
+# }
 
 write_tree <- function(tree, s) {
     n <- ape::Ntip(tree)
@@ -18,7 +18,7 @@ write_tree <- function(tree, s) {
     return(NULL)
 }
 
-write_alleles <- function(alleles_df, s) {
+write_alleles <- function(alleles_df, s, m) {
     alleles_list <- as.list(alleles_df)
     temp_file <- tempfile()
     ape::write.nexus.data(alleles_list, temp_file, "standard")
@@ -28,7 +28,7 @@ write_alleles <- function(alleles_df, s) {
     n <- length(alleles_list)
     readr::write_file(
         data_file,
-        file.path("data", sprintf("%s-n%s.nex", s, n))
+        file.path("data", sprintf("%s-n%s-m%s.nex", s, n, m))
     )
     return(NULL)
 }

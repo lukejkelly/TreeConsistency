@@ -23,11 +23,10 @@ for (i in seq_len(nrow(out))) {
 fig <- out |>
     ggplot(aes(x = k, y = p, color = as.factor(n))) +
     geom_line() +
-    scale_x_log10() +
     scale_x_continuous(
         breaks = k_seq(J),
         trans = scales::log10_trans(),
-        labels = scales::label_log(10)
+        labels = scales::label_log()
     ) +
     labs(
         x = "k",
@@ -36,4 +35,4 @@ fig <- out |>
     ) +
     theme_classic() +
     theme(legend.title.align = 0.5)
-ggsave(file.path("figs", "kingman.pdf"), fig, width = 8, height = 3)
+ggsave(file.path("figs", "kingman.pdf"), fig, width = 8, height = 4)

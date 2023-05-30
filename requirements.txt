@@ -1,6 +1,5 @@
 TreeTools
 ape
-dplyr
 ggplot2
 latex2exp
 magrittr
@@ -9,5 +8,4 @@ purrr
 readr
 scales
 stringr
-svMisc
 tidyr

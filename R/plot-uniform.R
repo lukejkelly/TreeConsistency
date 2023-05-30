@@ -1,17 +1,16 @@
-library("ggplot2")
+source("pars.R")
+source(file.path("R", "plot-utilities.R"))
 
-source(file.path("pars", "uniform.R"))
-source(file.path("R", "utilities.R"))
-
-out <- tidyr::expand_grid(n = n_seq(N), k = k_seq(J), p = NA_real_)
+s <- "uniform"
+out <- tidyr::expand_grid(n = n_seq, mu = m_seq, k = k_seq, p = NA_real_)
 for (i in seq_len(nrow(out))) {
-    svMisc::progress(i, nrow(out))
     n <- out$n[i]
+    m <- out$mu[i]
     k <- out$k[i]
-    tree0 <- file.path("trees", sprintf("uniform-n%s.nex", n)) |>
+    tree0 <- file.path("trees", sprintf("%s-n%s.nex", s, n)) |>
         ape::read.nexus() |>
         ape::unroot()
-    trees <- file.path("out", sprintf("uniform-n%s-k%s.t", n, k)) |>
+    trees <- file.path("out", sprintf("%s-n%s-m%s-k%s.t", s, n, m, k)) |>
         ape::read.tree() |>
         magrittr::extract(-1) |>
         ape::unroot()
@@ -21,20 +20,4 @@ for (i in seq_len(nrow(out))) {
     }
     out$p[i] <- mean(topology)
 }
-
-fig <- out |>
-    ggplot(aes(x = k, y = p, color = as.factor(n))) +
-    geom_line() +
-    scale_x_continuous(
-        breaks = k_seq(J),
-        trans = scales::log10_trans(),
-        labels = scales::label_log(10)
-    ) +
-    labs(
-        x = "k",
-        y = latex2exp::TeX("$ \\Pi^{italic(U,n)}(italic(T)_0 | bolditalic(a)_1, ldots, bolditalic(a)_k) $"),
-        color = "n"
-    ) +
-    theme_classic() +
-    theme(legend.title.align = 0.5)
-ggsave(file.path("figs", "uniform.pdf"), fig, width = 8, height = 3)
+plot_support(out, s, m_seq, k_seq)

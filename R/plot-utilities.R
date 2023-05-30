@@ -2,9 +2,8 @@
 plot_support <- function(out, s, m_seq, k_seq) {
     y_lab <-
         sprintf(
-            "$ \\Pi^{italic(%s,n)}(italic(T)_0 | %2$s_1, ldots, %2$s_k) $",
-            toupper(substr(s, 1, 1)),
-            "bolditalic(a)"
+            "$ \\Pi^{italic(%s,n)}(italic(T)_0 | bold(a)_1, ldots, bold(a)_{italic(k)}) $",
+            toupper(substr(s, 1, 1))
         ) |>
         latex2exp::TeX()
     fig <- out |>

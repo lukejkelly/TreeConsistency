@@ -1,6 +1,6 @@
 # helper functions for writing data and config files
 
-write_data <- function(alleles, s, n, mu, k) {
+write_data <- function(alleles, s, n, m, k) {
     alleles_k <- alleles |>
         purrr::map(magrittr::extract, seq_len(k))
     temp_file <- tempfile()
@@ -11,17 +11,17 @@ write_data <- function(alleles, s, n, mu, k) {
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
         data_file,
-        file.path("data", sprintf("%s-n%s-m%s-k%s.nex", s, n, mu, k))
+        file.path("data", sprintf("%s-n%s-m%s-k%s.nex", s, n, m, k))
     )
     return(NULL)
 }
 
-write_config <- function(s, n, mu, k) {
+write_config <- function(s, n, m, k) {
     config_template <- readr::read_file(file.path("Rev", "config-template.Rev"))
     config <- config_template |>
         stringr::str_replace(
             "_PATH_TO_DATA_",
-            file.path("data", sprintf("%s-n%s-m%s-k%s.nex", s, n, mu, k))
+            file.path("data", sprintf("%s-n%s-m%s-k%s.nex", s, n, m, k))
         ) |>
         stringr::str_replace(
             "_PATH_TO_TREE_PRIOR_",
@@ -29,19 +29,19 @@ write_config <- function(s, n, mu, k) {
         ) |>
         stringr::str_replace(
             "_MUTATION_RATE_",
-            as.character(mu)
+            as.character(m)
         ) |>
         stringr::str_replace(
             "_PATH_TO_LOG_",
-            file.path("out", sprintf("%s-n%s-m%s-k%s.log", s, n, mu, k))
+            file.path("out", sprintf("%s-n%s-m%s-k%s.log", s, n, m, k))
         ) |>
         stringr::str_replace(
             "_PATH_TO_SAMPLED_TREES_",
-            file.path("out", sprintf("%s-n%s-m%s-k%s.t", s, n, mu, k))
+            file.path("out", sprintf("%s-n%s-m%s-k%s.t", s, n, m, k))
         )
     readr::write_file(
         config,
-        file.path("configs", sprintf("%s-n%s-m%s-k%s.Rev", s, n, mu, k))
+        file.path("configs", sprintf("%s-n%s-m%s-k%s.Rev", s, n, m, k))
     )
     return(NULL)
 }

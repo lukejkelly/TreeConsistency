@@ -32,7 +32,7 @@ monitors.append(
         printgen=1e2
     )
 )
-monitors.append( mnScreen(printgen=1e4) )
+monitors.append(mnScreen(printgen=1e4))
 
 # initialize the mcmc object
 modelObj = model(tree)

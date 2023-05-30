@@ -6,8 +6,8 @@
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 
-N <- dplyr::last(n_seq)
-K <- dplyr::last(k_seq)
+N <- max(n_seq)
+K <- max(k_seq)
 
 n <- 4
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)

@@ -16,7 +16,11 @@ plot_support <- function(out, s, m_seq, k_seq) {
         ) +
         ggplot2::labs(x = "k", y = y_lab, color = "n") +
         ggplot2::theme_light() +
-        ggplot2::theme(legend.title.align = 0.5) +
+        ggplot2::theme(
+            legend.title.align = 0.5,
+            axis.title.x = ggplot2::element_text(face = "italic"),
+            legend.title = ggplot2::element_text(face = "italic")
+        ) +
         ggplot2::facet_wrap(~ mu, 1, labeller = ggplot2::label_bquote(mu == .(mu)))
     ggplot2::ggsave(
         file.path("figs", sprintf("%s.pdf", s)),

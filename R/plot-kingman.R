@@ -1,8 +1,12 @@
 source("pars.R")
 source(file.path("R", "plot-utilities.R"))
-
 s <- "kingman"
-out <- tidyr::expand_grid(n = n_seq, mu = m_seq, k = k_seq, p = NA_real_)
+out <- tidyr::expand_grid(
+    n = sort(n_seq),
+    mu = sort(m_seq),
+    k = sort(k_seq),
+    p = NA_real_
+)
 for (i in seq_len(nrow(out))) {
     n <- out$n[i]
     m <- out$mu[i]
@@ -19,3 +23,4 @@ for (i in seq_len(nrow(out))) {
     out$p[i] <- mean(topology)
 }
 plot_support(out, s, m_seq, k_seq)
+plot_threshold(out, s, n_seq, k_seq)

@@ -1,5 +1,6 @@
 TreeTools
 ape
+dplyr
 ggplot2
 latex2exp
 magrittr

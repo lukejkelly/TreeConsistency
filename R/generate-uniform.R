@@ -31,18 +31,21 @@ for (j in seq_along(m_seq)) {
 while (n < N) {
     i1 <- sample(tree$tip.label, 1)
     i2 <- paste0("t", n + 1)
-    x <- rexp(1)
+    x1 <- rexp(1)
+    x2 <- rexp(1)
 
     tree <- tree |>
         TreeTools::AddTip(i1, i2, 0, 0) |>
-        extend_leaves(c(i1, i2), x)
+        extend_leaves(i1, x1) |>
+        extend_leaves(i2, x2)
     write_tree(tree, "uniform")
 
     for (j in seq_along(m_seq)) {
         mu <- m_seq[j]
         alleles[[j]] <- alleles[[j]] |>
             duplicate_alleles(i1, i2) |>
-            mutate_alleles(c(i1, i2), mu * x)
+            mutate_alleles(i1, mu * x1) |>
+            mutate_alleles(i2, mu * x2)
         write_alleles(alleles[[j]], "uniform", mu)
     }
     n <- n + 1

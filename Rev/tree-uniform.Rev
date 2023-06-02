@@ -1,13 +1,12 @@
-# unrooted tree prior and associated mcmc moves
-
+# unrooted tree prior uniform across topology and exponential on branch lengths
 tree ~ dnUniformTopologyBranchLength(
     taxa=taxa,
-    branchLengthDistribution=dnExponential(1)
+    branchLengthDistribution=dnExponential(lambda=1)
 )
 
-moves.append( mvNNI(tree) )
-moves.append( mvSPR(tree) )
+# topology moves
+moves.append(mvNNI(tree))
+moves.append(mvSPR(tree))
 
-num_taxa <- alleles.ntaxa()
-num_branches <- 2 * num_taxa - 3
-moves.append( mvBranchLengthScale(tree, weight=num_branches) )
+# branch length moves
+moves.append(mvBranchLengthScale(tree))

@@ -6,7 +6,7 @@ taxa <- alleles.names()
 moves = VectorMoves()
 monitors = VectorMonitors()
 
-# tree prior and associated moves
+# tree prior and associated mcmc moves
 source("_PATH_TO_TREE_PRIOR_")
 
 # observation model
@@ -36,8 +36,8 @@ monitors.append(mnScreen(printgen=1e4))
 
 # initialize the mcmc object
 modelObj = model(tree)
-mcmcObj = mcmc(modelObj, monitors, moves)
-mcmcObj.burnin(generations=1e4, tuningInterval=5e3)
+mcmcObj = mcmc(modelObj, monitors, moves, moveschedule="single")
+mcmcObj.burnin(generations=2e4, tuningInterval=1e4)
 
 # main analysis
 mcmcObj.run(generations=1e5)

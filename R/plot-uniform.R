@@ -25,4 +25,4 @@ for (i in seq_len(nrow(out))) {
     out$p[i] <- mean(topology)
 }
 plot_support(out, s, m_seq, k_seq)
-plot_threshold(out, s, n_seq, m_seq, k_seq)
+plot_threshold(out, s, n_seq, k_seq)

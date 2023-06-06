@@ -4,14 +4,12 @@
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 
-N <- max(n_seq)
-K <- max(k_seq)
-
 n <- min(n_seq)
 tree <- ape::rcoal(n)
 write_tree(tree, "kingman")
 
 alleles <- vector(mode = "list", length = length(m_seq))
+K <- max(k_seq)
 for (j in seq_along(m_seq)) {
     mu <- m_seq[j]
     alleles[[j]] <-
@@ -26,6 +24,7 @@ for (j in seq_along(m_seq)) {
     write_alleles(alleles[[j]], "kingman", mu)
 }
 
+N <- max(n_seq)
 while (n < N) {
     i1 <- sample(tree$tip.label, 1)
     i2 <- paste0("t", n + 1)

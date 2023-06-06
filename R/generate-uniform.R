@@ -6,14 +6,12 @@
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 
-N <- max(n_seq)
-K <- max(k_seq)
-
-n <- 4
+n <- min(n_seq)
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)
 write_tree(tree, "uniform")
 
 alleles <- vector(mode = "list", length = length(m_seq))
+K <- max(k_seq)
 for (j in seq_along(m_seq)) {
     mu <- m_seq[j]
     alleles[[j]] <-
@@ -28,8 +26,10 @@ for (j in seq_along(m_seq)) {
     write_alleles(alleles[[j]], "uniform", mu)
 }
 
+N <- max(n_seq)
+K <- max(k_seq)
 while (n < N) {
-    i1 <- sample(tree$tip.label, 1)
+    i1 <- sample(tree$edge, 1)
     i2 <- paste0("t", n + 1)
     x1 <- rexp(1)
     x2 <- rexp(1)
@@ -42,11 +42,17 @@ while (n < N) {
 
     for (j in seq_along(m_seq)) {
         mu <- m_seq[j]
-        alleles[[j]] <- alleles[[j]] |>
-            duplicate_alleles(i1, i2) |>
-            mutate_alleles(i1, mu * x1) |>
-            mutate_alleles(i2, mu * x2)
-        write_alleles(alleles[[j]], "uniform", mu)
+        alleles <-
+            phangorn::simSeq(
+                tree,
+                l = K,
+                type = "USER",
+                levels = c("0", "1"),
+                rate = mu,
+                ancestral = TRUE
+            ) |>
+            as.data.frame()
+        write_alleles(alleles, "uniform", mu)
     }
     n <- n + 1
 }

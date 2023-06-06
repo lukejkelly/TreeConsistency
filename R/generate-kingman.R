@@ -7,7 +7,7 @@ source(file.path("R", "generate-utilities.R"))
 N <- max(n_seq)
 K <- max(k_seq)
 
-n <- 4
+n <- min(n_seq)
 tree <- ape::rcoal(n)
 write_tree(tree, "kingman")
 

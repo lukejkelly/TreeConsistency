@@ -80,4 +80,5 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         width = 3 * length(m_seq) + 2,
         height = 3
     )
+    return(NULL)
 }

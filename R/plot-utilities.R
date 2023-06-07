@@ -42,8 +42,8 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         out |>
         dplyr::nest_by(n, mu) |>
         dplyr::mutate(
-            lower = max(data$k[data$p < 0.5]),
-            upper = min(data$k[data$p >= 0.5])
+            upper = min(data$k[data$p >= 0.5]),
+            lower = max(data$k[data$k < upper])
         ) |>
         # dplyr::mutate(mu = as.factor(mu)) |>
         # ggplot2::ggplot(ggplot2::aes(x = n, y = k, color = mu)) +

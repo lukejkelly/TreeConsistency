@@ -25,43 +25,62 @@ write_alleles <- function(alleles_df, s, m) {
     return(NULL)
 }
 
-get_inds_labs <- function(labs, tree) {
-    # tip label indices of tree
-    inds_labs <- purrr::map_int(labs, \(i) which(i == tree$tip.label))
-    return(inds_labs)
-}
+# get_inds_labs <- function(labs, tree) {
+#     # tip label indices of tree
+#     inds_labs <- purrr::map_int(labs, \(i) which(i == tree$tip.label))
+#     return(inds_labs)
+# }
+#
+# get_edge <- function(inds, tree) {
+#     # node indices to edge indices
+#     inds_edge <- purrr::map_int(inds, \(i) which(i == tree$edge[, 2]))
+#     return(inds_edge)
+# }
 
-get_inds_edge <- function(inds_labs, tree) {
-    # tip label indices to edge indices
-    inds_edge <- purrr::map_int(inds_labs, \(i) which(i == tree$edge[, 2]))
-    return(inds_edge)
-}
-
-extend_leaves <- function(tree, labs, x) {
+extend_leaves <- function(tree, x) {
     # extend edges into labs by x units
-    inds <- labs |>
-        get_inds_labs(tree) |>
-        get_inds_edge(tree)
+    inds <- tree$tip.label |>
+        seq_along() |>
+        purrr::map_int(\(i) which(i == tree$edge[, 2]))
     tree$edge.length[inds] <- tree$edge.length[inds] + x
     return(tree)
 }
 
-duplicate_alleles <- function(alleles, from, to) {
-    # identical offspring after a branching event indexed by tip label
-    alleles[to] <- alleles[from]
-    return(alleles)
+extend_branch <- function(tree, b, x) {
+    # extend edge b by x units
+    tree$edge.length[b] <- tree$edge.length[b] + x
+    return(tree)
 }
 
-mutate_alleles <- function(alleles, labs, delta) {
-    # advance mutation process by delta units along branches into tips labs
-    # inspired by phangorn::simSeq
-    levels <- c("0", "1")
-    p <- (1 + exp(-2 * delta)) / 2
-    for (i in labs) {
-        j0 <- alleles[[i]] == "0"
-        j1 <- alleles[[i]] == "1"
-        alleles[[i]][j0] <- sample(levels, sum(j0), TRUE, c(p, 1 - p))
-        alleles[[i]][j1] <- sample(levels, sum(j1), TRUE, c(1 - p, p))
-    }
+# duplicate_alleles <- function(alleles, from, to) {
+#     # identical offspring after a branching event indexed by tip label
+#     alleles[to] <- alleles[from]
+#     return(alleles)
+# }
+#
+# mutate_alleles <- function(alleles, labs, delta) {
+#     # advance mutation process by delta units along branches into tips labs
+#     # inspired by phangorn::simSeq
+#     levels <- c("0", "1")
+#     p <- (1 + exp(-2 * delta)) / 2
+#     for (i in labs) {
+#         j0 <- alleles[[i]] == "0"
+#         j1 <- alleles[[i]] == "1"
+#         alleles[[i]][j0] <- sample(levels, sum(j0), TRUE, c(p, 1 - p))
+#         alleles[[i]][j1] <- sample(levels, sum(j1), TRUE, c(1 - p, p))
+#     }
+#     return(alleles)
+# }
+
+simulate_alleles <- function(tree, n_sites, mutation_rate) {
+    alleles <-
+        phangorn::simSeq(
+            tree,
+            l = n_sites,
+            type = "USER",
+            levels = c("0", "1"),
+            rate = mutation_rate
+        ) |>
+        as.data.frame()
     return(alleles)
 }

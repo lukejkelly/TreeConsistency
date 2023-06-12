@@ -63,13 +63,13 @@ grow_uniform <- function(tree_old, b, i, x) {
     n <- length(tree_old$tip.label)
     new_leaf <- n + 1L
     new_node <- 2L * n
-
+    # increment node indices by 1 to accommodate new leaf
     edge <- rbind(tree_old$edge, integer(2), integer(2))
     edge[edge > n] <- edge[edge > n] + 1L
     edge[2 * n - 2, i] <- c(new_node, edge[b, i[2]])
     edge[2 * n - 1, ] <- c(new_node, new_leaf)
     edge[b, i[2]] <- new_node
-
+    # new edges at end of edge and edge.length, ditto new_node in tip.label
     tree_new <- list(
         edge = edge,
         edge.length = c(tree_old$edge.length, x),

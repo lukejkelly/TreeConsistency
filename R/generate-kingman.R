@@ -18,14 +18,9 @@ for (m in m_seq) {
 N <- max(n_seq)
 while (n < N) {
     i <- sample.int(length(tree$tip.label), 1)
-    j <- paste0("t", n + 1)
     x <- rexp(1, choose(n + 1, 2))
-
-    tree <- tree |>
-        TreeTools::AddTip(i, j, 0, 0) |>
-        extend_leaves(x)
+    tree <- grow_kingman(tree, i, x)
     write_tree(tree, s)
-
     for (m in m_seq) {
         alleles <- simulate_alleles(tree, K, m)
         write_alleles(alleles, s, m)

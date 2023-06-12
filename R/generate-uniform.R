@@ -19,23 +19,10 @@ for (m in m_seq) {
 N <- max(n_seq)
 while (n < N) {
     b <- sample.int(nrow(tree$edge), 1)
-    i <- sample(tree$edge[b, ], 1)
-    j <- paste0("t", n + 1)
+    i <- sample.int(2)
     x <- rexp(2)
-
-    if (i <= n) {
-        tree <- tree |>
-            extend_branch(b, x[1]) |>
-            TreeTools::AddTip(i, j, x[2], x[1])
-    } else {
-        p <- tree$edge[tree$edge[, 2] == i, 1]
-        tree <- tree |>
-            extend_branch()
-
-    }
-
+    tree <- grow_uniform(tree, b, i, x)
     write_tree(tree, s)
-
     for (m in m_seq) {
         alleles <- simulate_alleles(tree, K, m)
         write_alleles(alleles, s, m)

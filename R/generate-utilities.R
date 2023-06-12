@@ -37,19 +37,47 @@ write_alleles <- function(alleles_df, s, m) {
 #     return(inds_edge)
 # }
 
-extend_leaves <- function(tree, x) {
-    # extend edges into labs by x units
-    inds <- tree$tip.label |>
-        seq_along() |>
-        purrr::map_int(\(i) which(i == tree$edge[, 2]))
-    tree$edge.length[inds] <- tree$edge.length[inds] + x
-    return(tree)
+# extend_leaves <- function(tree, x) {
+#     # extend leaf edges by x units
+#     inds <- which(tree$edge[, 2] %in% seq_along(tree$tip.label))
+#     tree$edge.length[inds] <- tree$edge.length[inds] + x
+#     return(tree)
+# }
+
+grow_kingman <- function(tree_old, i, x) {
+    # create sibling of leaf i and extend all edges into leaves by x units
+    n <- length(tree_old$tip.label)
+    tree_new <- TreeTools::AddTip(tree_old, i, paste0("t", n + 1), 0, 0)
+    ind_leaves <- seq_len(n + 1)
+    edge_leaves <- which(tree_new$edge[, 2] %in% ind_leaves)
+    tree_new$edge.length[edge_leaves] <- tree_new$edge.length[edge_leaves] + x
+    return(tree_new)
 }
 
-extend_branch <- function(tree, b, x) {
-    # extend edge b by x units
-    tree$edge.length[b] <- tree$edge.length[b] + x
-    return(tree)
+grow_uniform <- function(tree_old, b, i, x) {
+    # from branch b detach node b[i[2]] and replace by new_node with edges of
+    # length x[1] to node b[i[2]] and of length x[2] to new_node
+    #                                                        __x[1]__ b[i[2]] ..
+    # .. b[i[1]] __ b[i[2]] ..  -->  .. b[i[1]] __ new_node_|
+    #                                                       |__x[2]__ new_leaf
+    n <- length(tree_old$tip.label)
+    new_leaf <- n + 1L
+    new_node <- 2L * n
+
+    edge <- rbind(tree_old$edge, integer(2), integer(2))
+    edge[edge > n] <- edge[edge > n] + 1L
+    edge[2 * n - 2, i] <- c(new_node, edge[b, i[2]])
+    edge[2 * n - 1, ] <- c(new_node, new_leaf)
+    edge[b, i[2]] <- new_node
+
+    tree_new <- list(
+        edge = edge,
+        edge.length = c(tree_old$edge.length, x),
+        Nnode = tree_old$Nnode + 1L,
+        tip.label = c(tree_old$tip.label, paste0("t", new_leaf))
+    )
+    class(tree_new) <- "phylo"
+    return(tree_new)
 }
 
 # duplicate_alleles <- function(alleles, from, to) {

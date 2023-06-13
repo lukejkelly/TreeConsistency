@@ -1,7 +1,6 @@
 # helper function for simulating trees and data
 
-write_tree <- function(tree, s) {
-    n <- ape::Ntip(tree)
+write_tree <- function(tree, s, n) {
     ape::write.nexus(
         tree,
         file = file.path("trees", sprintf("%s-n%s.nex", s, n)),
@@ -37,7 +36,7 @@ write_alleles <- function(alleles_df, s, n, m, r) {
     return(NULL)
 }
 
-simulate_and_write_alleles <- function(tree, s, m_seq, r_seq, k_seq) {
+simulate_and_write_alleles <- function(tree, s, n, m_seq, r_seq, k_seq) {
     K <- max(k_seq)
     for (m in m_seq) {
         for (r in r_seq) {

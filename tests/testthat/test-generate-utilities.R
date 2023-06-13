@@ -51,7 +51,7 @@ test_that(
                         seq_along(t2$edge),
                         \(j) which(t2$edge[, i] == t1$edge[b])
                     )
-                    # new leaf and node
+                    # new leaf and node indices
                     i_new_leaf <- n + 1
                     e_new_leaf <- which(t2$edge[, 2] == i_new_leaf)
                     expect_equal(t1$tip.label, t2$tip.label[-i_new_leaf])
@@ -77,8 +77,13 @@ test_that(
                             c(t1$edge[b, 2] + 1, i_new_leaf)
                         )
                     }
+                    # edge lengths
                     expect_equal(t1$edge.length[b], t2$edge.length[b])
                     expect_equal(x, t2$edge.length[c(2 * n - 2, 2 * n - 1)])
+                    expect_equal(
+                        sum(t1$edge.length) + sum(x),
+                        sum(t2$edge.length)
+                    )
                 }
             }
         }

@@ -10,18 +10,41 @@ write_tree <- function(tree, s) {
     return(NULL)
 }
 
-write_alleles <- function(alleles_df, s, m) {
+simulate_alleles <- function(tree, mutation_rate, n_sites) {
+    alleles <-
+        phangorn::simSeq(
+            tree,
+            l = n_sites,
+            type = "USER",
+            levels = c("0", "1"),
+            rate = mutation_rate
+        ) |>
+        as.data.frame()
+    return(alleles)
+}
+
+write_alleles <- function(alleles_df, s, n, m, r) {
     alleles_list <- as.list(alleles_df)
     temp_file <- tempfile()
     ape::write.nexus.data(alleles_list, temp_file, "standard")
     data_file <- temp_file |>
         readr::read_file() |>
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
-    n <- length(alleles_list)
     readr::write_file(
         data_file,
-        file.path("data", sprintf("%s-n%s-m%s.nex", s, n, m))
+        file.path("data", sprintf("%s-n%s-m%s-r%s.nex", s, n, m, r))
     )
+    return(NULL)
+}
+
+simulate_and_write_alleles <- function(tree, s, m_seq, k_seq, r_seq) {
+    K <- max(k_seq)
+    for (m in m_seq) {
+        for (r in r_seq) {
+            alleles <- simulate_alleles(tree, m, K)
+            write_alleles(alleles, s, n, m, r)
+        }
+    }
     return(NULL)
 }
 
@@ -44,9 +67,8 @@ write_alleles <- function(alleles_df, s, m) {
 #     return(tree)
 # }
 
-grow_kingman <- function(tree_old, i, x) {
+grow_kingman <- function(tree_old, n, i, x) {
     # create sibling of leaf i and extend all edges into leaves by x units
-    n <- length(tree_old$tip.label)
     tree_new <- TreeTools::AddTip(tree_old, i, paste0("t", n + 1), 0, 0)
     ind_leaves <- seq_len(n + 1)
     edge_leaves <- which(tree_new$edge[, 2] %in% ind_leaves)
@@ -54,13 +76,12 @@ grow_kingman <- function(tree_old, i, x) {
     return(tree_new)
 }
 
-grow_uniform <- function(tree_old, b, i, x) {
+grow_uniform <- function(tree_old, n, b, i, x) {
     # from branch b detach node b[i[2]] and replace by new_node with edges of
     # length x[1] to node b[i[2]] and of length x[2] to new_node
     #                                                        __x[1]__ b[i[2]] ..
     # .. b[i[1]] __ b[i[2]] ..  -->  .. b[i[1]] __ new_node_|
     #                                                       |__x[2]__ new_leaf
-    n <- length(tree_old$tip.label)
     new_leaf <- n + 1L
     new_node <- 2L * n
     # increment node indices by 1 to accommodate new leaf
@@ -99,16 +120,3 @@ grow_uniform <- function(tree_old, b, i, x) {
 #     }
 #     return(alleles)
 # }
-
-simulate_alleles <- function(tree, n_sites, mutation_rate) {
-    alleles <-
-        phangorn::simSeq(
-            tree,
-            l = n_sites,
-            type = "USER",
-            levels = c("0", "1"),
-            rate = mutation_rate
-        ) |>
-        as.data.frame()
-    return(alleles)
-}

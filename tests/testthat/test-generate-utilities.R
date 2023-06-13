@@ -7,7 +7,7 @@ test_that(
             e1_l_l <- t1$edge.length[e1_l_i]
             for (i in seq_len(n)) {
                 x <- rexp(1, choose(n + 1, 2))
-                t2 <- grow_kingman(t1, i, x)
+                t2 <- grow_kingman(t1, n, i, x)
                 # no errors in tree structure
                 c2 <- capture.output(ape::checkValidPhylo(t2))
                 for (k in seq_along(c2)) {
@@ -38,7 +38,7 @@ test_that(
             for (b in seq_len(2 * n - 3)) {
                 for (i in list(c(1, 2), c(2, 1))) {
                     x <- rexp(2)
-                    t2 <- grow_uniform(t1, b, i, x)
+                    t2 <- grow_uniform(t1, n, b, i, x)
                     # no warnings or errors in tree structure
                     c2 <- capture.output(ape::checkValidPhylo(t2))
                     for (k in seq_along(c2)) {

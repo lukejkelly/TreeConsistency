@@ -8,22 +8,14 @@ s <- "kingman"
 n <- min(n_seq)
 tree <- ape::rcoal(n)
 write_tree(tree, s)
-
-K <- max(k_seq)
-for (m in m_seq) {
-    alleles <- simulate_alleles(tree, K, m)
-    write_alleles(alleles, s, m)
-}
+simulate_and_write_alleles(tree, s, m_seq, k_seq, r_seq)
 
 N <- max(n_seq)
 while (n < N) {
-    i <- sample.int(length(tree$tip.label), 1)
+    i <- sample.int(n, 1)
     x <- rexp(1, choose(n + 1, 2))
-    tree <- grow_kingman(tree, i, x)
+    tree <- grow_kingman(tree, n, i, x)
     write_tree(tree, s)
-    for (m in m_seq) {
-        alleles <- simulate_alleles(tree, K, m)
-        write_alleles(alleles, s, m)
-    }
+    simulate_and_write_alleles(tree, s, m_seq, k_seq, r_seq)
     n <- n + 1
 }

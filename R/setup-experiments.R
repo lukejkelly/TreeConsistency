@@ -8,9 +8,9 @@ s_seq <- c("kingman", "uniform")
 for (s in s_seq) {
     for (n in n_seq) {
         for (m in m_seq) {
-            alleles <-
-                file.path("data", sprintf("%s-n%s-m%s.nex", s, n, m)) |>
-                ape::read.nexus.data()
+            alleles <- ape::read.nexus.data(
+                file.path("data", sprintf("%s-n%s-m%s.nex", s, n, m))
+            )
             for (k in k_seq) {
                 write_data(alleles, s, n, m, k)
                 write_config(s, n, m, k)

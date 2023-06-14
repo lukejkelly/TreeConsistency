@@ -47,27 +47,14 @@ simulate_and_write_alleles <- function(tree, s, n, m_seq, k_seq, r_seq) {
     return(NULL)
 }
 
-# get_inds_labs <- function(labs, tree) {
-#     # tip label indices of tree
-#     inds_labs <- purrr::map_int(labs, \(i) which(i == tree$tip.label))
-#     return(inds_labs)
-# }
-#
-# get_edge <- function(inds, tree) {
-#     # node indices to edge indices
-#     inds_edge <- purrr::map_int(inds, \(i) which(i == tree$edge[, 2]))
-#     return(inds_edge)
-# }
-
-# extend_leaves <- function(tree, x) {
-#     # extend leaf edges by x units
-#     inds <- which(tree$edge[, 2] %in% seq_along(tree$tip.label))
-#     tree$edge.length[inds] <- tree$edge.length[inds] + x
-#     return(tree)
-# }
-
 grow_kingman <- function(tree_old, n, i, x) {
     # create sibling of leaf i and extend all edges into leaves by x units
+    # .. ___[l1]___ 1       .. __________[l1 + x]___________ 1
+    # ..                    ..
+    # .. ___[li]___ i  -->  .. ___[li]___ new_node ___[x]___ i
+    # ..                                          |___[x]___ new_leaf
+    # ..
+    # .. ___[ln]___ n       .. __________[ln + x]___________ n
     b <- which(tree_old$edge[, 2] == i)
     new_leaf <- n + 1L
     new_node <- 2L * n + 1L
@@ -96,9 +83,9 @@ grow_kingman <- function(tree_old, n, i, x) {
 grow_uniform <- function(tree_old, n, b, i, x) {
     # from branch b detach node b[i[2]] and replace by new_node with edges of
     # length x[1] to node b[i[2]] and of length x[2] to new_node
-    #                                                        __x[1]__ b[i[2]] ..
-    # .. b[i[1]] __ b[i[2]] ..  -->  .. b[i[1]] __ new_node_|
-    #                                                       |__x[2]__ new_leaf
+    #
+    # .. b[i[1]] __ b[i[2]] ..  -->  .. b[i[1]] __ new_node __x[1]__ b[i[2]] ..
+    #                                                      |__x[2]__ new_leaf
     new_leaf <- n + 1L
     new_node <- 2L * n
     # increment node indices by 1 to accommodate new leaf

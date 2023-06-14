@@ -1,13 +1,17 @@
 # helper function plot output with custom y label then save to figs directory
 plot_support <- function(out, s, m_seq, k_seq) {
+    fig_data <- out |>
+        dplyr::group_by(m, n, k) |>
+        dplyr::summarise(p_bar = mean(p)) |>
+        dplyr::ungroup()
     y_lab <-
         sprintf(
             "$ \\Pi^{italic(%s,n)}(italic(T)_0 | bold(a)_1, ldots, bold(a)_{italic(k)}) $",
             toupper(substr(s, 1, 1))
         ) |>
         latex2exp::TeX()
-    fig <- out |>
-        ggplot2::ggplot(ggplot2::aes(x = k, y = p, color = as.factor(n))) +
+    fig <- fig_data |>
+        ggplot2::ggplot(ggplot2::aes(x = k, y = p_bar, color = as.factor(n))) +
         ggplot2::geom_line(alpha = 0.75) +
         ggplot2::scale_x_continuous(
             breaks = k_seq,
@@ -23,11 +27,7 @@ plot_support <- function(out, s, m_seq, k_seq) {
             axis.title.x = ggplot2::element_text(face = "italic"),
             legend.title = ggplot2::element_text(face = "italic")
         ) +
-        ggplot2::facet_wrap(
-            ~ mu,
-            1,
-            labeller = ggplot2::label_bquote(mu == .(mu))
-        )
+        ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
         file.path("figs", sprintf("support-%s.pdf", s)),
         fig,
@@ -37,16 +37,16 @@ plot_support <- function(out, s, m_seq, k_seq) {
     return(NULL)
 }
 
-plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
-    fig <-
-        out |>
-        dplyr::nest_by(n, mu) |>
-        dplyr::mutate(
-            upper = min(data$k[data$p >= 0.5]),
-            lower = max(data$k[data$k < upper])
+plot_threshold <- function(out, s, m_seq, n_seq, k_seq) {
+    fig_data <- out |>
+       dplyr::group_by(m, n, k) |>
+       dplyr::summarise(p_bar = mean(p)) |>
+       dplyr::summarise(
+            upper = min(k[p_bar >= 0.5]),
+            lower = max(k[k < upper])
         ) |>
-        # dplyr::mutate(mu = as.factor(mu)) |>
-        # ggplot2::ggplot(ggplot2::aes(x = n, y = k, color = mu)) +
+        dplyr::ungroup()
+    fig <- fig_data |>
         ggplot2::ggplot(ggplot2::aes(x = n, y = k, color = as.factor(n))) +
         ggplot2::geom_errorbar(
             ggplot2::aes(ymin = lower, ymax = upper),
@@ -69,11 +69,7 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
             axis.title.y = ggplot2::element_text(face = "italic"),
             legend.title = ggplot2::element_text(face = "italic")
         ) +
-        ggplot2::facet_wrap(
-            ~ mu,
-            1,
-            labeller = ggplot2::label_bquote(mu == .(mu))
-        )
+        ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
         file.path("figs", sprintf("threshold-%s.pdf", s)),
         fig,

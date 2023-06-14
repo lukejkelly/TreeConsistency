@@ -1,20 +1,23 @@
 source("pars.R")
 source(file.path("R", "plot-utilities.R"))
 s <- "uniform"
+
 out <- tidyr::expand_grid(
+    m = sort(m_seq),
     n = sort(n_seq),
-    mu = sort(m_seq),
     k = sort(k_seq),
+    r = sort(r_seq),
     p = NA_real_
 )
 for (i in seq_len(nrow(out))) {
+    m <- out$m[i]
     n <- out$n[i]
-    m <- out$mu[i]
     k <- out$k[i]
+    r <- out$r[i]
     tree0 <- file.path("trees", sprintf("%s-n%s.nex", s, n)) |>
         ape::read.nexus() |>
         ape::unroot()
-    trees <- file.path("out", sprintf("%s-n%s-m%s-k%s.t", s, n, m, k)) |>
+    trees <- file.path("out", sprintf("%s-n%s-m%s-r%s-k%s.t", s, n, m, r, k)) |>
         ape::read.tree() |>
         magrittr::extract(-1) |>
         ape::unroot()
@@ -25,4 +28,4 @@ for (i in seq_len(nrow(out))) {
     out$p[i] <- mean(topology)
 }
 plot_support(out, s, m_seq, k_seq)
-plot_threshold(out, s, n_seq, m_seq, k_seq)
+plot_threshold(out, s, m_seq, n_seq, k_seq)

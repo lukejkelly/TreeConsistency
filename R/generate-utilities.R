@@ -68,10 +68,28 @@ simulate_and_write_alleles <- function(tree, s, n, m_seq, k_seq, r_seq) {
 
 grow_kingman <- function(tree_old, n, i, x) {
     # create sibling of leaf i and extend all edges into leaves by x units
-    tree_new <- TreeTools::AddTip(tree_old, i, paste0("t", n + 1), 0, 0)
+    b <- which(tree_old$edge[, 2] == i)
+    new_leaf <- n + 1L
+    new_node <- 2L * n + 1L
+    # increment node indices by 1 to accommodate new leaf
+    edge <- rbind(tree_old$edge, integer(2), integer(2))
+    edge[edge > n] <- edge[edge > n] + 1L
+    edge[2 * n - 1, ] <- c(new_node, i)
+    edge[2 * n, ] <- c(new_node, new_leaf)
+    edge[b, 2] <- new_node
+    # add x to lengths of edges into leaves
+    edge_length <- c(tree_old$edge.length, double(2))
     ind_leaves <- seq_len(n + 1)
-    edge_leaves <- which(tree_new$edge[, 2] %in% ind_leaves)
-    tree_new$edge.length[edge_leaves] <- tree_new$edge.length[edge_leaves] + x
+    edge_leaves <- which(edge[, 2] %in% ind_leaves)
+    edge_length[edge_leaves] <- edge_length[edge_leaves] + x
+    # new edges at end of edge and edge.length, ditto new_node in tip.label
+    tree_new <- list(
+        edge = edge,
+        edge.length = edge_length,
+        Nnode = tree_old$Nnode + 1L,
+        tip.label = c(tree_old$tip.label, paste0("t", new_leaf))
+    )
+    class(tree_new) <- "phylo"
     return(tree_new)
 }
 

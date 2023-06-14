@@ -22,7 +22,7 @@ simulate_alleles <- function(tree, mutation_rate, n_sites) {
     return(alleles)
 }
 
-write_alleles <- function(alleles_df, s, n, m, r) {
+write_alleles <- function(alleles_df, s, n, m, k, r) {
     alleles_list <- as.list(alleles_df)
     temp_file <- tempfile()
     ape::write.nexus.data(alleles_list, temp_file, "standard")
@@ -31,17 +31,17 @@ write_alleles <- function(alleles_df, s, n, m, r) {
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
         data_file,
-        file.path("data", sprintf("%s-n%s-m%s-r%s.nex", s, n, m, r))
+        file.path("raw", sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r))
     )
     return(NULL)
 }
 
-simulate_and_write_alleles <- function(tree, s, n, m_seq, r_seq, k_seq) {
+simulate_and_write_alleles <- function(tree, s, n, m_seq, k_seq, r_seq) {
     K <- max(k_seq)
     for (m in m_seq) {
         for (r in r_seq) {
             alleles <- simulate_alleles(tree, m, K)
-            write_alleles(alleles, s, n, m, r)
+            write_alleles(alleles, s, n, m, K, r)
         }
     }
     return(NULL)

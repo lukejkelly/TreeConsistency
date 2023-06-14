@@ -9,7 +9,7 @@ s <- "uniform"
 n <- min(n_seq)
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)
 write_tree(tree, s, n)
-simulate_and_write_alleles(tree, s, n, m_seq, r_seq, k_seq)
+simulate_and_write_alleles(tree, s, n, m_seq, k_seq, r_seq)
 
 N <- max(n_seq)
 while (n < N) {
@@ -19,5 +19,5 @@ while (n < N) {
     tree <- grow_uniform(tree, n, b, i, x)
     n <- n + 1
     write_tree(tree, s, n)
-    simulate_and_write_alleles(tree, s, n, m_seq, r_seq, k_seq)
+    simulate_and_write_alleles(tree, s, n, m_seq, k_seq, r_seq)
 }

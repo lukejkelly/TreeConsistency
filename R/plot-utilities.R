@@ -1,7 +1,7 @@
 # helper function plot output with custom y label then save to figs directory
 plot_support <- function(out, s, m_seq, k_seq) {
     fig_data <- out |>
-        dplyr::group_by(m, n, k) |>
+        dplyr::group_by(n, m, k) |>
         dplyr::summarise(p_bar = mean(p)) |>
         dplyr::ungroup()
     y_lab <-
@@ -37,9 +37,9 @@ plot_support <- function(out, s, m_seq, k_seq) {
     return(NULL)
 }
 
-plot_threshold <- function(out, s, m_seq, n_seq, k_seq) {
+plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
     fig_data <- out |>
-       dplyr::group_by(m, n, k) |>
+       dplyr::group_by(n, m, k) |>
        dplyr::summarise(p_bar = mean(p)) |>
        dplyr::summarise(
             upper = min(k[p_bar >= 0.5]),

@@ -124,3 +124,20 @@ grow_uniform <- function(tree_old, n, b, i, x) {
 #     }
 #     return(alleles)
 # }
+
+plot_tree <- function(tree, n) {
+    plot(tree, "phylogram", no.margin = FALSE, align.tip.label = TRUE, main = n)
+    ape::edgelabels(round(tree$edge.length, 2), cex = 0.5, adj = 1)
+    # ape::tiplabels()
+    # ape::nodelabels()
+    ape::axisPhylo(backward = FALSE)
+}
+
+plot_tree_sequence <- function(s, n_seq) {
+    pdf(file.path("trees", sprintf("%s.pdf", s)))
+    for (n in seq.int(min(n_seq), max(n_seq))) {
+        tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
+        plot_tree(tree, n)
+    }
+    dev.off()
+}

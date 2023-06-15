@@ -21,3 +21,4 @@ while (n < N) {
     write_tree(tree, s, n)
     simulate_and_write_alleles(tree, s, n, m_seq, k_seq, r_seq)
 }
+plot_tree_sequence(s, n_seq)

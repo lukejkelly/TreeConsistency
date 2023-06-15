@@ -36,12 +36,15 @@ write_alleles <- function(alleles_df, s, n, m, k, r) {
     return(NULL)
 }
 
-simulate_and_write_alleles <- function(tree, s, n, m_seq, k_seq, r_seq) {
+simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
     K <- max(k_seq)
-    for (m in m_seq) {
-        for (r in r_seq) {
-            alleles <- simulate_alleles(tree, m, K)
-            write_alleles(alleles, s, n, m, K, r)
+    for (n in n_seq) {
+        tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
+        for (m in m_seq) {
+            for (r in r_seq) {
+                alleles <- simulate_alleles(tree, m, K)
+                write_alleles(alleles, s, n, m, K, r)
+            }
         }
     }
     return(NULL)

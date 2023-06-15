@@ -78,3 +78,52 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
     )
     return(NULL)
 }
+
+# plotting log-likelihood traces from mcmc
+plot_trace <- function(s, n_seq, m_seq, k_seq, r_seq) {
+    out <- tidyr::expand_grid(
+        n = sort(n_seq),
+        m = sort(m_seq),
+        k = sort(k_seq),
+        r = sort(r_seq),
+        l = list(NULL)
+    )
+    for (i in seq_len(nrow(out))) {
+        n <- out$n[i]
+        m <- out$m[i]
+        k <- out$k[i]
+        r <- out$r[i]
+        out$l[[i]] <-
+            file.path(
+                "out",
+                sprintf("%s-n%s-m%s-k%s-r%s.log", s, n, m, k, r)
+            ) |>
+            readr::read_tsv(col_types = "iddd") |>
+            dplyr::select(Iteration, Likelihood)
+    }
+    figs <- out |>
+        tidyr::unnest(l) |>
+        dplyr::group_by(n, m, k) |>
+        dplyr::group_map(plot_trace_group)
+    pdf(
+        file.path("figs", sprintf("trace-%s.pdf", s)),
+        width = 7,
+        height = length(r_seq)
+    )
+    print(figs)
+    dev.off()
+    return(NULL)
+}
+
+plot_trace_group <- function(x, y) {
+    fig <- x |>
+        ggplot2::ggplot() +
+        ggplot2::aes(x = Iteration, y = Likelihood) +
+        ggplot2::geom_line() +
+        ggplot2::facet_wrap(~ r, ncol = 1, scales = "free_y") +
+        ggplot2::labs(
+            title = sprintf("n = %s, m = %s, k = %s", y$n, y$m, y$k),
+            y = "Log-likelihood"
+        )
+    return(fig)
+}

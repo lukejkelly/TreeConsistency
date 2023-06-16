@@ -38,6 +38,7 @@ write_alleles <- function(alleles_df, s, n, m, k, r) {
 
 simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
     K <- max(k_seq)
+    pb <- progress::progress_bar$new(total = length(n_seq) * length(m_seq))
     for (n in n_seq) {
         tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
         for (m in m_seq) {
@@ -45,6 +46,7 @@ simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
                 alleles <- simulate_alleles(tree, m, K)
                 write_alleles(alleles, s, n, m, K, r)
             }
+            pb$tick()
         }
     }
     return(NULL)

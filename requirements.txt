@@ -4,6 +4,7 @@ ggplot2
 latex2exp
 magrittr
 phangorn
+progress
 purrr
 readr
 scales

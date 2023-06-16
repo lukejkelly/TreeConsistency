@@ -9,6 +9,7 @@ out <- tidyr::expand_grid(
     r = sort(r_seq),
     p = NA_real_
 )
+pb <- progress::progress_bar$new(total = nrow(out))
 for (i in seq_len(nrow(out))) {
     n <- out$n[i]
     m <- out$m[i]
@@ -24,6 +25,7 @@ for (i in seq_len(nrow(out))) {
         topology[j] <- ape::all.equal.phylo(tree0, trees[[j]], FALSE)
     }
     out$p[i] <- mean(topology)
+    pb$tick()
 }
 plot_support(out, s, m_seq, k_seq)
 plot_threshold(out, s, n_seq, m_seq, k_seq)

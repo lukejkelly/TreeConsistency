@@ -6,6 +6,7 @@ source(file.path("R", "setup-utilities.R"))
 
 s_seq <- c("kingman", "uniform")
 K <- max(k_seq)
+pb <- progress::progress_bar$new(total = length(s_seq) * length(n_seq))
 for (s in s_seq) {
     for (n in n_seq) {
         for (m in m_seq) {
@@ -22,5 +23,6 @@ for (s in s_seq) {
                 }
             }
         }
+        pb$tick()
     }
 }

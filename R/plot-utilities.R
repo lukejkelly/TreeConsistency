@@ -37,6 +37,61 @@ plot_support <- function(out, s, m_seq, k_seq) {
     return(NULL)
 }
 
+plot_support_all <- function(fig_data, s, m_seq, k_seq, r_seq) {
+    y_lab <-
+        sprintf(
+            "$ \\Pi^{italic(%s,n)}(italic(T)_0 | bold(a)_1, ldots, bold(a)_{italic(k)}) $",
+            toupper(substr(s, 1, 1))
+        ) |>
+        latex2exp::TeX()
+    fig <- fig_data |>
+        ggplot2::ggplot() +
+        ggplot2::aes(
+            x = k,
+            y = p,
+            colour = as.factor(n),
+            group = as.factor(r)
+        ) +
+        ggplot2::geom_point(
+            alpha = 0.5,
+            color = "black",
+            position = ggplot2::position_jitter(0.1, 0)
+        ) +
+        ggplot2::stat_summary(
+            ggplot2::aes(group = 1),
+            fun = mean,
+            geom = "line"
+        ) +
+        ggplot2::stat_summary(
+            ggplot2::aes(group = 1),
+            fun = median,
+            geom = "line",
+            linetype = 2,
+        ) +
+        ggplot2::scale_x_continuous(
+            breaks = k_seq,
+            trans = scales::log10_trans(),
+            labels = scales::label_log(),
+            minor_breaks = NULL
+        ) +
+        ggplot2::scale_y_continuous(limits = c(0, 1), minor_breaks = NULL) +
+        ggplot2::labs(x = "k", y = y_lab, color = "n") +
+        ggplot2::theme_light() +
+        ggplot2::theme(
+            legend.title.align = 0.5,
+            axis.title.x = ggplot2::element_text(face = "italic"),
+            legend.title = ggplot2::element_text(face = "italic")
+        ) +
+        ggplot2::facet_grid(n ~ m, labeller = "label_both")
+    ggplot2::ggsave(
+        file.path("figs", sprintf("%s-support-all.pdf", s)),
+        fig,
+        width = 3 * length(m_seq) + 2,
+        height = 2 * length(n_seq)
+    )
+    return(NULL)
+}
+
 plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
     fig_data <- out |>
        dplyr::group_by(n, m, k) |>

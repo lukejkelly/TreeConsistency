@@ -30,4 +30,5 @@ for (i in seq_len(nrow(out))) {
     pb$tick()
 }
 plot_support(out, s, m_seq, k_seq)
+plot_support_all(out, s, m_seq, k_seq, r_seq)
 plot_threshold(out, s, n_seq, m_seq, k_seq)

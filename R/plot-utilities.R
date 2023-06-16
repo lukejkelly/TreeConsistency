@@ -1,8 +1,8 @@
-# helper function plot output with custom y label then save to figs directory
+# helper functions to plot and save to figs directory
 plot_support <- function(out, s, m_seq, k_seq) {
     fig_data <- out |>
         dplyr::group_by(n, m, k) |>
-        dplyr::summarise(p_bar = mean(p)) |>
+        dplyr::summarise(q = median(p)) |>
         dplyr::ungroup()
     y_lab <-
         sprintf(
@@ -11,7 +11,8 @@ plot_support <- function(out, s, m_seq, k_seq) {
         ) |>
         latex2exp::TeX()
     fig <- fig_data |>
-        ggplot2::ggplot(ggplot2::aes(x = k, y = p_bar, color = as.factor(n))) +
+        ggplot2::ggplot() +
+        ggplot2::aes(x = k, y = q, color = as.factor(n)) +
         ggplot2::geom_line(alpha = 0.75) +
         ggplot2::scale_x_continuous(
             breaks = k_seq,
@@ -29,7 +30,7 @@ plot_support <- function(out, s, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("support-%s.pdf", s)),
+        file.path("figs", sprintf("%s-support-median.pdf", s)),
         fig,
         width = 3 * length(m_seq) + 2,
         height = 3
@@ -95,14 +96,15 @@ plot_support_all <- function(fig_data, s, m_seq, k_seq, r_seq) {
 plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
     fig_data <- out |>
        dplyr::group_by(n, m, k) |>
-       dplyr::summarise(p_bar = mean(p)) |>
+       dplyr::summarise(q = median(p)) |>
        dplyr::summarise(
-            upper = min(k[p_bar >= 0.5]),
+            upper = min(k[q >= 0.5]),
             lower = max(k[k < upper])
         ) |>
         dplyr::ungroup()
     fig <- fig_data |>
-        ggplot2::ggplot(ggplot2::aes(x = n, y = k, color = as.factor(n))) +
+        ggplot2::ggplot() +
+        ggplot2::aes(x = n, y = k, color = as.factor(n)) +
         ggplot2::geom_errorbar(
             ggplot2::aes(ymin = lower, ymax = upper),
             position = ggplot2::position_dodge(width = 1),
@@ -126,7 +128,7 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("threshold-%s.pdf", s)),
+        file.path("figs", sprintf("%s-threshold-median.pdf", s)),
         fig,
         width = 3 * length(m_seq) + 2,
         height = 3
@@ -161,7 +163,7 @@ plot_trace <- function(s, n_seq, m_seq, k_seq, r_seq) {
         dplyr::group_by(n, m, k) |>
         dplyr::group_map(plot_trace_group)
     pdf(
-        file.path("figs", sprintf("trace-%s.pdf", s)),
+        file.path("figs", sprintf("%s-trace.pdf", s)),
         width = 7,
         height = length(r_seq)
     )

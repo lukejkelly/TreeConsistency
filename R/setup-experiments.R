@@ -9,6 +9,7 @@ K <- max(k_seq)
 pb <- progress::progress_bar$new(total = length(s_seq) * length(n_seq))
 for (s in s_seq) {
     for (n in n_seq) {
+        pb$tick()
         for (m in m_seq) {
             for (r in r_seq) {
                 alleles <-
@@ -23,6 +24,5 @@ for (s in s_seq) {
                 }
             }
         }
-        pb$tick()
     }
 }

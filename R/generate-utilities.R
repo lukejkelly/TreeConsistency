@@ -42,11 +42,11 @@ simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
     for (n in n_seq) {
         tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
         for (m in m_seq) {
+            pb$tick()
             for (r in r_seq) {
                 alleles <- simulate_alleles(tree, m, K)
                 write_alleles(alleles, s, n, m, K, r)
             }
-            pb$tick()
         }
     }
     return(NULL)

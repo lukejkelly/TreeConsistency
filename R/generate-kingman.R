@@ -1,47 +1,24 @@
-# sequentially build coalescent trees with n = n_seq leaves then generate
-# coupled data sets at K sites from a JC69 model with mutation rate mu
+# sequentially build coalescent trees on n_seq tips then generate data at
+# K = max(k_seq) sites on each from a JC69 model with mutation rates m_seq
 
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
+s <- "kingman"
 
-N <- max(n_seq)
-K <- max(k_seq)
-
-n <- 4
+n <- min(n_seq)
 tree <- ape::rcoal(n)
-write_tree(tree, "kingman")
+write_tree(tree, s, n)
 
-alleles <- vector(mode = "list", length = length(m_seq))
-for (j in seq_along(m_seq)) {
-    mu <- m_seq[j]
-    alleles[[j]] <-
-        phangorn::simSeq(
-            tree,
-            l = K,
-            type = "USER",
-            levels = c("0", "1"),
-            rate = mu
-        ) |>
-        as.data.frame()
-    write_alleles(alleles[[j]], "kingman", mu)
-}
-
+# sequentially generate trees on n + 1, ..., N tips
+N <- max(n_seq)
 while (n < N) {
-    i1 <- sample(tree$tip.label, 1)
-    i2 <- paste0("t", n + 1)
+    i <- sample.int(n, 1)
     x <- rexp(1, choose(n + 1, 2))
-
-    tree <- tree |>
-        TreeTools::AddTip(i1, i2, 0, 0) |>
-        extend_leaves(c(tree$tip.label, i2), x)
-    write_tree(tree, "kingman")
-
-    for (j in seq_along(m_seq)) {
-        mu <- m_seq[j]
-        alleles[[j]] <- alleles[[j]] |>
-            duplicate_alleles(i1, i2) |>
-            mutate_alleles(c(tree$tip.label, i2), mu * x)
-        write_alleles(alleles[[j]], "kingman", mu)
-    }
+    tree <- grow_kingman(tree, n, i, x)
     n <- n + 1
+    write_tree(tree, s, n)
 }
+plot_tree_sequence(s, n_seq)
+
+# independent data sets for each analysis
+simulate_and_write_alleles(s, n_seq, m_seq, k_seq, r_seq)

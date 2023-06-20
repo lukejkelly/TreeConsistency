@@ -1,52 +1,26 @@
-# sequentially build unrooted trees with n = n_seq leaves with a uniform
-# distribution across topologies and exponential branch lengths then generate
-# coupled sequences at K = max(k_seq) sites from a JC69 model with mutation
-# rates m_seq
+# sequentially build unrooted trees on n_seq tips marginally distributed to be
+# uniform across topologies and exponential on branch lengths, then generate
+# sequences at K = max(k_seq) sites from a JC69 model with mutation rates m_seq
 
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
+s <- "uniform"
 
-N <- max(n_seq)
-K <- max(k_seq)
-
-n <- 4
+n <- min(n_seq)
 tree <- ape::rtree(n, rooted = FALSE, br = rexp)
-write_tree(tree, "uniform")
+write_tree(tree, s, n)
 
-alleles <- vector(mode = "list", length = length(m_seq))
-for (j in seq_along(m_seq)) {
-    mu <- m_seq[j]
-    alleles[[j]] <-
-        phangorn::simSeq(
-            tree,
-            l = K,
-            type = "USER",
-            levels = c("0", "1"),
-            rate = mu
-        ) |>
-        as.data.frame()
-    write_alleles(alleles[[j]], "uniform", mu)
-}
-
+# sequentially generate trees on n + 1, ..., N tips
+N <- max(n_seq)
 while (n < N) {
-    i1 <- sample(tree$tip.label, 1)
-    i2 <- paste0("t", n + 1)
-    x1 <- rexp(1)
-    x2 <- rexp(1)
-
-    tree <- tree |>
-        TreeTools::AddTip(i1, i2, 0, 0) |>
-        extend_leaves(i1, x1) |>
-        extend_leaves(i2, x2)
-    write_tree(tree, "uniform")
-
-    for (j in seq_along(m_seq)) {
-        mu <- m_seq[j]
-        alleles[[j]] <- alleles[[j]] |>
-            duplicate_alleles(i1, i2) |>
-            mutate_alleles(i1, mu * x1) |>
-            mutate_alleles(i2, mu * x2)
-        write_alleles(alleles[[j]], "uniform", mu)
-    }
+    b <- sample.int(2 * n - 3, 1)
+    i <- sample.int(2)
+    x <- rexp(2)
+    tree <- grow_uniform(tree, n, b, i, x)
     n <- n + 1
+    write_tree(tree, s, n)
 }
+plot_tree_sequence(s, n_seq)
+
+# independent data sets for each analysis
+simulate_and_write_alleles(s, n_seq, m_seq, k_seq, r_seq)

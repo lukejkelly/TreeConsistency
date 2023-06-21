@@ -3,7 +3,7 @@
 write_tree <- function(tree, s, n) {
     ape::write.nexus(
         tree,
-        file = file.path("trees", sprintf("%s-n%s.nex", s, n)),
+        file = file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)),
         translate = FALSE
     )
     return(NULL)
@@ -31,7 +31,11 @@ write_alleles <- function(alleles_df, s, n, m, k, r) {
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
         data_file,
-        file.path("raw", sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r))
+        file.path(
+            "data",
+            "raw",
+            sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r)
+        )
     )
     return(NULL)
 }
@@ -40,7 +44,8 @@ simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
     K <- max(k_seq)
     pb <- progress::progress_bar$new(total = length(n_seq) * length(m_seq))
     for (n in n_seq) {
-        tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
+        tree <- file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)) |>
+            ape::read.nexus()
         for (m in m_seq) {
             pb$tick()
             for (r in r_seq) {
@@ -110,39 +115,29 @@ grow_uniform <- function(tree_old, n, b, i, x) {
     return(tree_new)
 }
 
-# duplicate_alleles <- function(alleles, from, to) {
-#     # identical offspring after a branching event indexed by tip label
-#     alleles[to] <- alleles[from]
-#     return(alleles)
-# }
-#
-# mutate_alleles <- function(alleles, labs, delta) {
-#     # advance mutation process by delta units along branches into tips labs
-#     # inspired by phangorn::simSeq
-#     levels <- c("0", "1")
-#     p <- (1 + exp(-2 * delta)) / 2
-#     for (i in labs) {
-#         j0 <- alleles[[i]] == "0"
-#         j1 <- alleles[[i]] == "1"
-#         alleles[[i]][j0] <- sample(levels, sum(j0), TRUE, c(p, 1 - p))
-#         alleles[[i]][j1] <- sample(levels, sum(j1), TRUE, c(1 - p, p))
-#     }
-#     return(alleles)
-# }
-
-plot_tree <- function(tree, n) {
-    plot(tree, "phylogram", no.margin = FALSE, align.tip.label = TRUE, main = n)
-    ape::edgelabels(round(tree$edge.length, 2), cex = 0.5, adj = 1)
-    # ape::tiplabels()
-    # ape::nodelabels()
-    ape::axisPhylo(backward = FALSE)
+plot_tree <- function(tree) {
+    n <- ape::Ntip(tree)
+    if (ape::is.rooted(tree)) {
+        ape::plot.phylo(tree, align.tip.label = TRUE, main = n)
+        # ape::edgelabels(round(tree$edge.length, 2), cex = 0.5, adj = 1)
+        # ape::tiplabels()
+        # ape::nodelabels()
+        ape::axisPhylo(backward = FALSE)
+    } else {
+        ape::plot.phylo(tree, "unrooted", main = n)
+        # ape::edgelabels(round(tree$edge.length, 2), cex = 0.5)
+        # ape::tiplabels()
+        # ape::nodelabels()
+    }
+    return(NULL)
 }
 
 plot_tree_sequence <- function(s, n_seq) {
-    pdf(file.path("trees", sprintf("%s.pdf", s)))
+    pdf(file.path("figs", sprintf("%s-t0.pdf", s)))
     for (n in seq.int(min(n_seq), max(n_seq))) {
-        tree <- ape::read.nexus(sprintf("trees/%s-n%s.nex", s, n))
-        plot_tree(tree, n)
+        tree <- file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)) |>
+            ape::read.nexus()
+        plot_tree(tree)
     }
     dev.off()
 }

@@ -1,5 +1,5 @@
-# run revbayes on each file in configs/
+# execute revbayes on each run file 
 mkdir -p out
-for FILE in configs/*; do
+for FILE in run/*; do
     rb --file $FILE
 done

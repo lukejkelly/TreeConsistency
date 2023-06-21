@@ -10,17 +10,25 @@ write_data <- function(alleles, s, n, m, k, r) {
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(
         data_file,
-        file.path("data", sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r))
+        file.path(
+            "data",
+            "proc",
+            sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r)
+        )
     )
     return(NULL)
 }
 
 write_config <- function(s, n, m, k, r) {
-    config_template <- readr::read_file(file.path("Rev", "config-template.Rev"))
-    config <- config_template |>
+    template <- readr::read_file(file.path("Rev", "config-template.Rev"))
+    config <- template |>
         stringr::str_replace(
             "_PATH_TO_DATA_",
-            file.path("data", sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r))
+            file.path(
+                "data",
+                "proc",
+                sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, k, r)
+            )
         ) |>
         stringr::str_replace(
             "_PATH_TO_TREE_PRIOR_",
@@ -40,7 +48,7 @@ write_config <- function(s, n, m, k, r) {
         )
     readr::write_file(
         config,
-        file.path("configs", sprintf("%s-n%s-m%s-k%s-r%s.Rev", s, n, m, k, r))
+        file.path("run", sprintf("%s-n%s-m%s-k%s-r%s.Rev", s, n, m, k, r))
     )
     return(NULL)
 }

@@ -14,6 +14,7 @@ for (s in s_seq) {
             for (r in r_seq) {
                 alleles <-
                     file.path(
+                        "data",
                         "raw",
                         sprintf("%s-n%s-m%s-k%s-r%s.nex", s, n, m, K, r)
                     ) |>

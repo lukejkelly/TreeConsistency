@@ -14,34 +14,36 @@ The `pars.R` file contains settings for the experiments in the form of sequences
 * `n_seq`: number of taxa
 * `m_seq`: mutation rates
 * `k_seq`: number of sites
+* `r_seq`: indices of replicates
+
+Execute `bash all.sh` to generate data, setup config files, run `RevBayes` and plot the output.
+The individual steps are described below.
 
 ### Generate data
 ```bash
 bash data.sh
 ```
 
-For each type of tree prior (Kingman's coalescent; uniform across topologies with exponential branch lengths):
-* Starting from `n = 4`, sequentially build a tree with `max(n_seq)` taxa by randomly splitting leaves and extending their branches.
-* Sample data at `max(k_seq)` sites under a Jukes—Cantor model with mutation rate `mu` in `m_seq`.
+For each type of tree prior (Kingman's coalescent or uniform across topologies with exponential branch lengths):
+* Starting from `n = 4`, sequentially build trees on `5, 6, ..., max(n_seq)` taxa.
+* Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` in `m_seq` and replicate index `r` in `r_seq`.
 
-For each `mu`, the data are coupled from trees with `n` leaves to `n + 1` by duplicating the sequence at the node which split and advancing the mutation process along the corresponding branches.
-
-The trees are written to `trees` and the sequences to `data`.
+The trees are written to `t0` and the data to `data/raw`.
 
 ### Config files
 ```bash
 bash setup.sh  
 ```
-For each tree type, number of taxa `n` in `n_seq`, mutation rate `m` in `m_seq` and sequence length `k` in `k_seq`:
-* Construct a data set using the first `k` sites in the corresponding data set with `max(k_seq)` sites.
-* Construct a RevBayes config file.
+For each tree type, number of taxa `n`, mutation rate `m` and replicate index `r`:
+* Construct a data set using the first `k` sites in the corresponding data set with `max(k_seq)` sites and store in `data/proc`.
+* Construct a RevBayes analysis file and write to `run`.
 
 
 ### Run experiments
 ```bash
 bash run.sh   
 ```
-Run RevBayes for every file in `config` and write the log and outputs to `out.`
+Run RevBayes on every configuration file in `run` and write the log and sampled trees to `out.`
 
 Edit the templates in the `Rev` directory to change run parameters.
 
@@ -49,7 +51,8 @@ Edit the templates in the `Rev` directory to change run parameters.
 ```bash
 bash plot.sh
 ```
-For each experiment, compute the posterior support for the corresponding true tree topology in `trees` and plot it as `k` increases for each mutation rate in `m_seq`.
+For each experiment, compute the median posterior support for the corresponding true tree topology in `t0` across replicate data sets then plot it as `k` increases and create a separate plot of the interval for `k` on which the curves cross 0.5.
+A trace plot of the log-likelihood of each sampled MCMC configuration is also created.
 
 
 ### Notes

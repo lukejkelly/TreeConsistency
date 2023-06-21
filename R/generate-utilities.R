@@ -3,7 +3,7 @@
 write_tree <- function(tree, s, n) {
     ape::write.nexus(
         tree,
-        file = file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)),
+        file = file.path("t0", sprintf("%s-n%s.nex", s, n)),
         translate = FALSE
     )
     return(NULL)
@@ -44,7 +44,7 @@ simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
     K <- max(k_seq)
     pb <- progress::progress_bar$new(total = length(n_seq) * length(m_seq))
     for (n in n_seq) {
-        tree <- file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)) |>
+        tree <- file.path("t0", sprintf("%s-n%s.nex", s, n)) |>
             ape::read.nexus()
         for (m in m_seq) {
             pb$tick()
@@ -135,7 +135,7 @@ plot_tree <- function(tree) {
 plot_tree_sequence <- function(s, n_seq) {
     pdf(file.path("figs", sprintf("%s-t0.pdf", s)))
     for (n in seq.int(min(n_seq), max(n_seq))) {
-        tree <- file.path("trees", "t0", sprintf("%s-n%s.nex", s, n)) |>
+        tree <- file.path("t0", sprintf("%s-n%s.nex", s, n)) |>
             ape::read.nexus()
         plot_tree(tree)
     }

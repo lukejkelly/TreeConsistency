@@ -16,7 +16,7 @@ for (i in seq_len(nrow(out))) {
     m <- out$m[i]
     k <- out$k[i]
     r <- out$r[i]
-    tree0 <- file.path("trees", sprintf("%s-n%s.nex", s, n)) |>
+    tree0 <- file.path("t0", sprintf("%s-n%s.nex", s, n)) |>
         ape::read.nexus()
     trees <- file.path("out", sprintf("%s-n%s-m%s-k%s-r%s.t", s, n, m, k, r)) |>
         ape::read.tree() |>

@@ -1,0 +1,12 @@
+# unrooted tree prior uniform across topology and exponential on branch lengths
+tree ~ dnUniformTopologyBranchLength(
+    taxa=taxa,
+    branchLengthDistribution=dnExponential(lambda=1)
+)
+
+# topology moves
+moves.append(mvNNI(tree))
+moves.append(mvSPR(tree))
+
+# branch length moves
+moves.append(mvBranchLengthScale(tree))

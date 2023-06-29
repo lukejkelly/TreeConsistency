@@ -1,0 +1,13 @@
+# kingman coalescent tree prior
+tree ~ dnCoalescent(theta=1, taxa=taxa)
+
+# topology moves
+moves.append(mvNNI(tree))
+moves.append(mvNarrow(tree))
+moves.append(mvFNPR(tree))
+
+# node time moves
+moves.append(mvNodeTimeScale(tree))
+moves.append(mvSubtreeScale(tree))
+moves.append(mvNodeTimeSlideUniform(tree))
+# moves.append(mvRootTimeScaleBactrian(tree))

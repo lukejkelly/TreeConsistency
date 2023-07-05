@@ -19,7 +19,7 @@ phylogeneticModel.clamp(alleles)
 monitors.append(
     mnModel(
         filename="_PATH_TO_LOG_",
-        printgen=5e2
+        printgen=1e3
     )
 )
 monitors.append(
@@ -29,7 +29,7 @@ monitors.append(
         likelihood=FALSE,
         prior=FALSE,
         filename="_PATH_TO_SAMPLED_TREES_",
-        printgen=5e2
+        printgen=1e3
     )
 )
 monitors.append(mnScreen(printgen=1e4))
@@ -37,10 +37,12 @@ monitors.append(mnScreen(printgen=1e4))
 # initialize the mcmc object
 modelObj = model(tree)
 mcmcObj = mcmc(modelObj, monitors, moves, moveschedule="single")
-mcmcObj.burnin(generations=5e5, tuningInterval=1e5)
+mcmcObj.burnin(generations=1e6, tuningInterval=5e5)
+mcmcObj.operatorSummary()
 
 # main analysis
-mcmcObj.run(generations=5e5)
+mcmcObj.run(generations=1e6)
+mcmcObj.operatorSummary()
 
 # quit
 q()

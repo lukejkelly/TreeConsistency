@@ -2,7 +2,7 @@
 plot_support <- function(out, s, m_seq, k_seq) {
     fig_data <- out |>
         dplyr::group_by(n, m, k) |>
-        dplyr::summarise(q = median(p)) |>
+        dplyr::summarise(q = mean(p)) |>
         dplyr::ungroup()
     y_lab <-
         sprintf(
@@ -30,7 +30,7 @@ plot_support <- function(out, s, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("%s-support-median.pdf", s)),
+        file.path("figs", sprintf("%s-support-mean.pdf", s)),
         fig,
         width = 3 * length(m_seq) + 2,
         height = 3
@@ -96,7 +96,7 @@ plot_support_all <- function(fig_data, s, m_seq, k_seq, r_seq) {
 plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
     fig_data <- out |>
        dplyr::group_by(n, m, k) |>
-       dplyr::summarise(q = median(p)) |>
+       dplyr::summarise(q = mean(p)) |>
        dplyr::summarise(
             upper = min(k[q >= 0.5]),
             lower = max(k[k < upper])
@@ -128,7 +128,7 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("%s-threshold-median.pdf", s)),
+        file.path("figs", sprintf("%s-threshold-mean.pdf", s)),
         fig,
         width = 3 * length(m_seq) + 2,
         height = 3

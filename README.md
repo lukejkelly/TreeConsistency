@@ -1,5 +1,5 @@
 # Posterior consistency as number of sites increases
-Analyse posterior support for true tree topology in coupled synthetic problems as the number of taxa, mutation rate and sequence length vary.
+Analyse posterior support for true tree topology in synthetic problems as the number of taxa, mutation rate and sequence length vary.
 
 ## Requirements
 
@@ -24,7 +24,7 @@ The individual steps are described below.
 bash data.sh
 ```
 
-For each type of tree prior (Kingman's coalescent or uniform across topologies with exponential branch lengths):
+For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths):
 * Starting from `n = min(n_seq)`, sequentially build trees on `n + 1, ..., max(n_seq)` taxa.
 * Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` in `m_seq` and replicate index `r` in `r_seq`.
 

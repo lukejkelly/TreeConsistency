@@ -128,6 +128,7 @@ plot_tree <- function(tree) {
         # ape::edgelabels(round(tree$edge.length, 2), cex = 0.5)
         # ape::tiplabels()
         # ape::nodelabels()
+        ape::add.scale.bar(length = 1, lcol = "blue", col = "blue")
     }
     return(NULL)
 }

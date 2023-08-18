@@ -1,11 +1,12 @@
-# sequentially build unrooted trees on n_seq tips marginally distributed to be
-# uniform across topologies and exponential on branch lengths, then generate
+# sequentially build unrooted trees on n_seq tips uniformly distributed across
+# topologies and truncated exponential on branch lengths, then generate
 # sequences at K = max(k_seq) sites from a JC69 model with mutation rates m_seq
 
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 s <- "uniform"
 
+# sample an exp(1) truncated to approximately its 5% and 95% quantiles
 a_l <- 0.05
 a_u <- 3
 rtexp <- \(n) -log(exp(-a_l) + runif(n) * (exp(-a_u) - exp(-a_l)))

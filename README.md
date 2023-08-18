@@ -25,7 +25,8 @@ bash data.sh
 ```
 
 For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths):
-* Starting from `n = min(n_seq)`, sequentially build trees on `n + 1, ..., max(n_seq)` taxa.
+* Starting from `n = min(n_seq)`, sequentially build trees on `n + 1, ..., max(n_seq)` taxa marginally drawn according to the prior.
+    * So that the computation is tractable, we truncate the branch length distribution in unrooted trees to avoid sampling very short or long branches.
 * Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` in `m_seq` and replicate index `r` in `r_seq`.
 
 The trees are written to `t0` and the data to `data/raw`.
@@ -53,7 +54,6 @@ bash plot.sh
 ```
 For each experiment, compute the median posterior support for the corresponding true tree topology in `t0` across replicate data sets then plot it as `k` increases and create a separate plot of the interval for `k` on which the curves cross 0.5.
 A trace plot of the log-likelihood of each sampled MCMC configuration is also created.
-
 
 ### Notes
 The files created by steps 1–4 can be removed by executing `bash clean.sh`.

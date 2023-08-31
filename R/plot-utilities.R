@@ -12,8 +12,13 @@ plot_support <- function(out, s, m_seq, k_seq) {
         latex2exp::TeX()
     fig <- fig_data |>
         ggplot2::ggplot() +
-        ggplot2::aes(x = k, y = q, color = as.factor(n)) +
-        ggplot2::geom_line(alpha = 0.75) +
+        ggplot2::aes(
+            x = k,
+            y = q,
+            color = as.factor(n),
+            linetype = as.factor(n)
+        ) +
+        ggplot2::geom_line(alpha = 0.75, linewidth = 0.5) +
         ggplot2::scale_x_continuous(
             breaks = k_seq,
             trans = scales::log10_trans(),
@@ -21,7 +26,7 @@ plot_support <- function(out, s, m_seq, k_seq) {
             minor_breaks = NULL
         ) +
         ggplot2::scale_y_continuous(limits = c(0, 1), minor_breaks = NULL) +
-        ggplot2::labs(x = "k", y = y_lab, color = "n") +
+        ggplot2::labs(x = "k", y = y_lab, color = "n", linetype = "n") +
         ggplot2::theme_light() +
         ggplot2::theme(
             legend.title.align = 0.5,
@@ -30,8 +35,14 @@ plot_support <- function(out, s, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("%s-support-mean.pdf", s)),
+        file.path("figs", sprintf("%s-support-mean-colour.pdf", s)),
         fig,
+        width = 3 * length(m_seq) + 2,
+        height = 3
+    )
+    ggplot2::ggsave(
+        file.path("figs", sprintf("%s-support-mean-grayscale.pdf", s)),
+        fig + ggplot2::aes(color = NULL),
         width = 3 * length(m_seq) + 2,
         height = 3
     )
@@ -107,8 +118,9 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         ggplot2::aes(x = n, y = k, color = as.factor(n)) +
         ggplot2::geom_errorbar(
             ggplot2::aes(ymin = lower, ymax = upper),
-            position = ggplot2::position_dodge(width = 1),
-            width = 0.75
+            width = 1 / 3,
+            linewidth = 0.5,
+            show.legend = FALSE
         ) +
         ggplot2::scale_x_continuous(breaks = n_seq, minor_breaks = NULL) +
         ggplot2::scale_y_continuous(
@@ -128,8 +140,14 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
         ) +
         ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
     ggplot2::ggsave(
-        file.path("figs", sprintf("%s-threshold-mean.pdf", s)),
+        file.path("figs", sprintf("%s-threshold-mean-colour.pdf", s)),
         fig,
+        width = 3 * length(m_seq) + 2,
+        height = 3
+    )
+    ggplot2::ggsave(
+        file.path("figs", sprintf("%s-threshold-mean-grayscale.pdf", s)),
+        fig + ggplot2::aes(color = NULL),
         width = 3 * length(m_seq) + 2,
         height = 3
     )

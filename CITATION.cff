@@ -1,0 +1,25 @@
+# YAML 1.2
+---
+authors:
+  - family-names: "Kirichenko"
+    given-names: "Alisa"
+  - family-names: "Kelly"
+    given-names: "Luke"
+  - family-names: "Koskela"
+    given-names: "Jere"
+cff-version: "1.2.0"
+message: "Software to reproduce the results in the manuscript"
+repository-code: "https://github.com/lukejkelly/TreeConsistency"
+title: TreeConsistency
+preferred-citation:
+  authors:
+  - family-names: "Kirichenko"
+    given-names: "Alisa"
+  - family-names: "Kelly"
+    given-names: "Luke J."
+  - family-names: "Koskela"
+    given-names: "Jere"
+  title: "Asymptotic guarantees for Bayesian phylogenetic tree reconstruction"
+  type: article
+  # year: ...
+  # journal: "..."

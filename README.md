@@ -1,11 +1,10 @@
-# Posterior consistency as number of sites increases
-Analyse posterior support for true tree topology in synthetic problems as the number of taxa, mutation rate and sequence length vary.
+# Asymptotic guarantees for Bayesian phylogenetic tree reconstruction
+The paper describes criteria for the consistency of Bayesian procedures for reconstructing phylogenetic trees as the number of taxa and sequence length vary. This repository replicates the numerical experiments in the manuscript. The code analyses the posterior support for the true tree topology in various synthetic problems as the tree prior, number of taxa, mutation rate and sequence length vary. Analogous to figures 2 and 3 of the main text, the code plots the posterior support for the true tree topology (averaged across replicate data sets) and the sequence length until the support first exceeds 0.5.
 
-## Requirements
+## Setup
+The working directory is the top level of the `TreeConsistency` directory.
 
-The working directory is the top level of `TreeConsistency`.
-
-The simulations require that `bash`, `R` and `rb` ([RevBayes](https://revbayes.github.io)) are available on the command line.
+The simulations require that the `bash`, `R` and `rb` ([RevBayes](https://revbayes.github.io)) commands are available on the command line.
 
 Install the necessary R packages via `bash requirements.sh`.
 
@@ -33,7 +32,7 @@ The trees are written to `t0` and the data to `data/raw`.
 
 ### Config files
 ```bash
-bash setup.sh  
+bash setup.sh
 ```
 For each tree type, number of taxa `n`, mutation rate `m` and replicate index `r`:
 * Construct a data set using the first `k` sites in the corresponding data set with `max(k_seq)` sites and store in `data/proc`.
@@ -42,7 +41,7 @@ For each tree type, number of taxa `n`, mutation rate `m` and replicate index `r
 
 ### Run experiments
 ```bash
-bash run.sh   
+bash run.sh
 ```
 Run RevBayes on every configuration file in `run` and write the log and sampled trees to `out.`
 
@@ -59,3 +58,21 @@ A trace plot of the log-likelihood of each sampled MCMC configuration is also cr
 The files created by steps 1–4 can be removed by executing `bash clean.sh`.
 
 If changing `k_seq` in `pars.R`, then you may want to update the axis scales in `R/plot-utilities.R`.
+
+### Version info
+The following software versions were used to create the figures in the main text:
+- Bash 5.2.21(1)
+- RevBayes 1.2.1
+- R 4.3.2
+  - ape 5.7.1
+  - dplyr 1.1.4
+  - ggplot2 3.4.4
+  - latex2exp 0.9.6
+  - magrittr 2.0.3
+  - phangorn 2.11.1
+  - progress 1.2.3
+  - purrr 1.0.2
+  - readr 2.1.4
+  - scales 1.3.0
+  - stringr 1.5.1
+  - tidyr 1.3.0

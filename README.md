@@ -25,7 +25,6 @@ bash data.sh
 
 For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths):
 * Starting from `n = min(n_seq)`, sequentially build trees on `n + 1, ..., max(n_seq)` taxa marginally drawn according to the prior.
-    * So that the computation is tractable, we truncate the branch length distribution in unrooted trees to avoid sampling very short or long branches.
 * Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` in `m_seq` and replicate index `r` in `r_seq`.
 
 The trees are written to `t0` and the data to `data/raw`.
@@ -61,9 +60,8 @@ If changing `k_seq` in `pars.R`, then you may want to update the axis scales in 
 
 ### Version info
 The following software versions were used to create the figures in the main text:
-- Bash 5.2.21(1)
-- RevBayes 1.2.1
-- R 4.3.2
+- RevBayes 1.2.4
+- R 4.4.1
   - ape 5.7.1
   - dplyr 1.1.4
   - ggplot2 3.4.4

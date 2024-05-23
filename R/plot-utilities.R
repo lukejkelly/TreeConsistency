@@ -33,7 +33,11 @@ plot_support <- function(out, s, m_seq, k_seq) {
             axis.title.x = ggplot2::element_text(face = "italic"),
             legend.title = ggplot2::element_text(face = "italic")
         ) +
-        ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
+        ggplot2::facet_wrap(
+            ~ m,
+            nrow = 1,
+            labeller = ggplot2::label_bquote(mu == .(m))
+        )
     ggplot2::ggsave(
         file.path("figs", sprintf("%s-support-mean-colour.pdf", s)),
         fig,
@@ -74,12 +78,12 @@ plot_support_all <- function(fig_data, s, m_seq, k_seq, r_seq) {
             fun = mean,
             geom = "line"
         ) +
-        ggplot2::stat_summary(
-            ggplot2::aes(group = 1),
-            fun = median,
-            geom = "line",
-            linetype = 2,
-        ) +
+        # ggplot2::stat_summary(
+        #     ggplot2::aes(group = 1),
+        #     fun = median,
+        #     geom = "line",
+        #     linetype = 2,
+        # ) +
         ggplot2::scale_x_continuous(
             breaks = k_seq,
             trans = scales::log10_trans(),
@@ -138,7 +142,11 @@ plot_threshold <- function(out, s, n_seq, m_seq, k_seq) {
             axis.title.y = ggplot2::element_text(face = "italic"),
             legend.title = ggplot2::element_text(face = "italic")
         ) +
-        ggplot2::facet_wrap(~ m, labeller = ggplot2::label_bquote(mu == .(m)))
+        ggplot2::facet_wrap(
+            ~ m,
+            nrow = 1,
+            labeller = ggplot2::label_bquote(mu == .(m))
+        )
     ggplot2::ggsave(
         file.path("figs", sprintf("%s-threshold-mean-colour.pdf", s)),
         fig,

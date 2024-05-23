@@ -1,17 +1,20 @@
-# sequentially build coalescent trees on n_seq tips then generate data at
-# K = max(k_seq) sites on each from a JC69 model with mutation rates m_seq
+# sequentially build coalescent trees on n_seq tips then generate alleles at
+# max(k_seq) sites from a JC69 model for each mutation rate in m_seq and
+# replication index in r_seq
 
+# setting up
 source("pars.R")
 source(file.path("R", "generate-utilities.R"))
 s <- "kingman"
 
+# initial tree
 n <- min(n_seq)
 tree <- ape::rcoal(n)
 write_tree(tree, s, n)
 
-# sequentially generate trees on n + 1, ..., N tips
-N <- max(n_seq)
-while (n < N) {
+# sequentially add branches to form trees on n + 1, ..., n_max tips
+n_max <- max(n_seq)
+while (n < n_max) {
     i <- sample.int(n, 1)
     x <- rexp(1, choose(n + 1, 2))
     tree <- grow_kingman(tree, n, i, x)
@@ -20,5 +23,5 @@ while (n < N) {
 }
 plot_tree_sequence(s, n_seq)
 
-# independent data sets for each analysis
+# generate independent data sets for each mutation rate and replication
 simulate_and_write_alleles(s, n_seq, m_seq, k_seq, r_seq)

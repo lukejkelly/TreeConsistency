@@ -42,7 +42,8 @@ write_alleles <- function(alleles_df, s, n, m, k, r) {
     alleles_list <- as.list(alleles_df)
     temp_file <- tempfile()
     ape::write.nexus.data(alleles_list, temp_file, "standard")
-    data_file <- temp_file |>
+    data_file <-
+        temp_file |>
         readr::read_file() |>
         stringr::str_replace("symbols=\"0123456789\"", "symbols=\"01\"")
     readr::write_file(

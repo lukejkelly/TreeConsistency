@@ -1,9 +1,20 @@
+# library("testthat")
+# source("R/generate-utilities.R")
+# test_file("tests/testthat/test-generate-utilities.R")
+
 test_that(
     "sequentially growing kingman coalescent trees",
     {
         old_grow_kingman <- function(tree_old, n, i, x) {
-            # create sibling of leaf i and extend all edges into leaves by x units
-            tree_new <- TreeTools::AddTip(tree_old, i, paste0("t", n + 1), 0, 0)
+            # create sibling of leaf i and extend edges into leaves by x units
+            tree_new <- TreeTools::AddTip(
+                tree_old,
+                i,
+                paste0("t", n + 1),
+                0,
+                0,
+                0
+            )
             ind_leaves <- seq_len(n + 1)
             edge_leaves <- which(tree_new$edge[, 2] %in% ind_leaves)
             tree_new$edge.length[edge_leaves] <- tree_new$edge.length[edge_leaves] + x

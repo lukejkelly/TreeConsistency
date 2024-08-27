@@ -1,21 +1,6 @@
-# add a leaf edge to a rooted tree with n tips by splitting leaf i and
-# extending edges into leaves by x units
-#
-#   ..___[l1]___ (1)       ..__________[l1 + x]___________ (1)
-#   ..___[l2]___ (2)       ..__________[l2 + x]___________ (2)
-#   ..                     ..
-#   ..___[li]___ (i)  -->  ..___[li]___(new_node)___[x]___ (i)
-#   ..                     ..                   |___[x]___ (new_leaf)
-#   ..                     ..
-#   ..___[ln]___ (n)       ..__________[ln + x]___________ (n)
-#
-# if the input tree is a coalescent tree on n leaves, i is drawn uniformly at
-# random from the tip indices and x from the exponential distribution with rate
-# choose(n + 1, 2), then the output is a coalescent tree on n + 1 leaves
-# this is the case in grow-kingman.R
 
 grow_kingman <- function(tree_old, n, i, x) {
-    # add a sibling to leaf i in tree_old then extends external edges by x units
+    # add a sibling to leaf i in tree_old then extend external edges by x units
     # tree_old: rooted class "phylo" tree object
     # n: number of tips in tree_old
     # i: index of leaf to split

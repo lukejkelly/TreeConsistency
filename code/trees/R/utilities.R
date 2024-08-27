@@ -1,7 +1,7 @@
 # helper functions for simulating trees
 
 write_tree <- function(tree, s, n) {
-    # write tree in nexus format to trees folder of trees
+    # write tree in nexus format to trees directory
     # tree: class "phylo" tree object
     # s: type of tree is either "kingman" if coalescent or "uniform" if unrooted
     # n: integer number of leaves of tree

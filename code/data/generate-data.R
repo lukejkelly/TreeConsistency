@@ -3,7 +3,7 @@
 
 # setting up
 source("pars.R")
-source(file.path("R", "generate-utilities.R"))
+source(file.path("code", "data", "R", "utilities.R"))
 
 # generate independent data sets for each mutation rate and replication index
 for (s in c("kingman", "uniform")) {

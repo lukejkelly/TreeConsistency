@@ -59,18 +59,43 @@ The files created by steps 1–4 can be removed by executing `bash clean.sh`.
 If changing `k_seq` in `pars.R`, then you may want to update the axis scales in `R/plot-utilities.R`.
 
 ### Version info
-The following software versions were used to create the figures in the main text:
-- RevBayes 1.2.4
-- R 4.4.1
-  - ape 5.7.1
-  - dplyr 1.1.4
-  - ggplot2 3.4.4
-  - latex2exp 0.9.6
-  - magrittr 2.0.3
-  - phangorn 2.11.1
-  - progress 1.2.3
-  - purrr 1.0.2
-  - readr 2.1.4
-  - scales 1.3.0
-  - stringr 1.5.1
-  - tidyr 1.3.0
+R v4.4.1 with the following packages was used to generate the data and analyse the MCMC output:
+- TreeTools v1.12.0
+- ape v5.8
+- dplyr v1.1.4
+- ggplot2 v3.5.1
+- latex2exp v0.9.6
+- magrittr v2.0.3
+- phangorn v2.11.1
+- progress v1.2.3
+- purrr v1.0.2
+- readr v2.1.5
+- scales v1.3.0
+- stringr v1.5.1
+- tidyr v1.3.1
+
+RevBayes v1.2.4 was used to generate MCMC samples targeting the posterior distribution for each experiment.
+We built RevBayes from source on the MeluXina supercomputer with the following slurm script:
+```bash
+#!/bin/bash -l
+
+#SBATCH --mail-user=lkelly@ucc.ie
+#SBATCH --mail-type=END
+
+#SBATCH -A p200482
+#SBATCH -p cpu
+#SBATCH -q dev
+
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 1
+
+#SBATCH -o slurm.out
+#SBATCH -t 1:30:00
+
+git clone --branch v1.2.4 --depth 1 https://github.com/revbayes/revbayes.git
+cd revbayes/projects/cmake
+ml Boost GCC CMake
+./build.sh
+```
+Instructions to build RevBayes from source on a Linux machine are at https://revbayes.github.io/compile-linux.

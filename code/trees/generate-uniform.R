@@ -4,7 +4,7 @@
 # setting up
 source("pars.R")
 source(file.path("code", "trees", "R", "grow-uniform.R"))
-source(file.path("code", "trees", "R", "tree-utilities.R"))
+source(file.path("code", "trees", "R", "utilities.R"))
 s <- "uniform"
 
 # initial tree

@@ -3,7 +3,7 @@
 # setting up
 source("pars.R")
 source(file.path("code", "trees", "R", "grow-kingman.R"))
-source(file.path("code", "trees", "R", "tree-utilities.R"))
+source(file.path("code", "trees", "R", "utilities.R"))
 s <- "kingman"
 
 # initial tree

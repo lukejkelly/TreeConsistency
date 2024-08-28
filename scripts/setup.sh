@@ -1,3 +1,3 @@
 # create all necessary files and directories in preparation for run.sh
-mkdir -p data/proc run
-R -f R/setup-experiments.R
+mkdir -p  run
+R -f code/mcmc/R/setup-experiments.R

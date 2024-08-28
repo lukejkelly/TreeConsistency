@@ -99,3 +99,13 @@ ml Boost GCC CMake
 ./build.sh
 ```
 Instructions to build RevBayes from source on a Linux machine are at https://revbayes.github.io/compile-linux.
+
+TODO: update or remove
+We tried (and failed) to build RevBayes 1.2.1 on MeluXina using EasyBuild via:
+```bash
+ml env/staging/2023.1
+ml EasyBuild/4.9.2
+export EASYBUILD_PREFIX=$HOME/install
+export EASYBUILD_BUILDPATH=/dev/shm
+eb RevBayes-1.2.1-gompi-2022a.eb --robot
+```

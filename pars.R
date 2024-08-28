@@ -1,3 +1,6 @@
+# types of trees to generate
+s_seq <- c("kingman", "uniform")
+
 # sequences of taxa count n, mutation rate m, site count k, replicate index r
 n_seq <- seq.int(4, 8, 1)
 m_seq <- c(0.25, 0.5, 1, 2)

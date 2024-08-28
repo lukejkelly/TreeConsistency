@@ -3,9 +3,9 @@
 
 # setting up
 source("pars.R")
-source(file.path("code", "data", "R", "utilities.R"))
+source(file.path("code", "data", "R", "generate-utilities.R"))
 
 # generate independent data sets for each mutation rate and replication index
-for (s in c("kingman", "uniform")) {
-    simulate_and_write_alleles(s, n_seq, m_seq, k_seq, r_seq)
+for (s in s_seq) {
+    generate_data(s, n_seq, m_seq, k_seq, r_seq)
 }

@@ -17,7 +17,7 @@ simulate_alleles <- function(tree, mutation_rate, n_sites) {
     return(alleles)
 }
 
-write_alleles <- function(alleles_df, s, n, m, k, r) {
+write_data <- function(alleles_df, s, n, m, k, r) {
     # write alleles in nexus format to data/raw after correcting the symbol list
     # alleles_df: data frame of alleles output by simulate_alleles() on tree of
     #   type s with n leaves
@@ -44,7 +44,7 @@ write_alleles <- function(alleles_df, s, n, m, k, r) {
     return(NULL)
 }
 
-simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
+generate_data <- function(s, n_seq, m_seq, k_seq, r_seq) {
     # simulate alleles from the JC69 model on a grid of trees, mutation rates
     # and replication indices
     # s: type of tree is either "kingman" if coalescent or "uniform" if unrooted
@@ -63,7 +63,7 @@ simulate_and_write_alleles <- function(s, n_seq, m_seq, k_seq, r_seq) {
             pb$tick()
             for (r in r_seq) {
                 alleles <- simulate_alleles(tree, m, k_max)
-                write_alleles(alleles, s, n, m, k_max, r)
+                write_data(alleles, s, n, m, k_max, r)
             }
         }
     }

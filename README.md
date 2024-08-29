@@ -6,7 +6,36 @@ The working directory is the top level of the `TreeConsistency` directory.
 
 The simulations require that the `bash`, `R` and `rb` ([RevBayes](https://revbayes.github.io)) commands are available on the command line.
 
-Install the necessary R packages via `bash requirements.sh`.
+### R
+R v4.4.1 was used to generate data and analyse MCMC output. The packages required to run the code are:
+- TreeTools v1.12.0
+- ape v5.8
+- dplyr v1.1.4
+- ggplot2 v3.5.1
+- latex2exp v0.9.6
+- magrittr v2.0.3
+- phangorn v2.11.1
+- progress v1.2.3
+- purrr v1.0.2
+- readr v2.1.5
+- scales v1.3.0
+- stringr v1.5.1
+- tidyr v1.3.1
+
+The `renv` package was used to create a virtual environment with the above packages and their dependences. The package environment can be restored by starting `R` from the top-level of the repository and executing:
+```R
+if (!("renv" %in% rownames(installed.packages()))) {
+    install.packages("renv")
+}
+renv::restore()
+```
+
+### RevBayes
+RevBayes v1.2.4 (the current version at the time) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set. Executables and source code is available at https://revbayes.github.io/download. Our script to build RevBayes from source on the MeluXina supercomputer are in `config/get-rb.sh` following the instructions at https://revbayes.github.io/compile-linux.
+
+
+**TODO: update everything below.**
+
 
 ## Analyses
 The `pars.R` file contains settings for the experiments in the form of sequences written as R commands:
@@ -57,55 +86,3 @@ A trace plot of the log-likelihood of each sampled MCMC configuration is also cr
 The files created by steps 1–4 can be removed by executing `bash clean.sh`.
 
 If changing `k_seq` in `pars.R`, then you may want to update the axis scales in `R/plot-utilities.R`.
-
-### Version info
-R v4.4.1 with the following packages was used to generate the data and analyse the MCMC output:
-- TreeTools v1.12.0
-- ape v5.8
-- dplyr v1.1.4
-- ggplot2 v3.5.1
-- latex2exp v0.9.6
-- magrittr v2.0.3
-- phangorn v2.11.1
-- progress v1.2.3
-- purrr v1.0.2
-- readr v2.1.5
-- scales v1.3.0
-- stringr v1.5.1
-- tidyr v1.3.1
-
-RevBayes v1.2.4 was used to generate MCMC samples targeting the posterior distribution for each experiment.
-We built RevBayes from source on the MeluXina supercomputer with the following slurm script:
-```bash
-#!/bin/bash -l
-
-#SBATCH --mail-user=lkelly@ucc.ie
-#SBATCH --mail-type=END
-
-#SBATCH -A p200482
-#SBATCH -p cpu
-#SBATCH -q dev
-
-#SBATCH -N 1
-#SBATCH -n 1
-#SBATCH -c 1
-
-#SBATCH -o slurm.out
-#SBATCH -t 1:30:00
-
-git clone --branch v1.2.4 --depth 1 https://github.com/revbayes/revbayes.git
-cd revbayes/projects/cmake
-ml Boost GCC CMake
-./build.sh
-```
-Instructions to build RevBayes from source on a Linux machine are at https://revbayes.github.io/compile-linux.
-
-TODO: update or remove
-We tried (and failed) to build RevBayes 1.2.1 on MeluXina using EasyBuild via:
-```bash
-ml env/staging/2023.1
-ml EasyBuild/4.9.2
-export EASYBUILD_PREFIX=$HOME/install
-export EASYBUILD_BUILDPATH=/dev/shm
-eb RevBayes-1.2.1-gompi-2022a.eb --robot
-```

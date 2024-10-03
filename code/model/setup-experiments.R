@@ -1,9 +1,9 @@
 # set up mcmc analyses
 
 source("pars.R")
-source(file.path("code", "mcmc", "R", "utilities.R"))
+source(file.path("code", "model", "R", "utilities.R"))
 
-s_seq <- c("kingman", "uniform")
+# s_seq <- c("kingman", "uniform")
 k_max <- max(k_seq)
 pb <- progress::progress_bar$new(total = length(s_seq) * length(n_seq))
 for (s in s_seq) {

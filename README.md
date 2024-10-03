@@ -31,7 +31,7 @@ renv::restore()
 ```
 
 ### RevBayes
-RevBayes v1.2.4 (the current version at the time) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set. Executables and source code is available at https://revbayes.github.io/download. Our script to build RevBayes from source on the MeluXina supercomputer are in `config/get-rb.sh` following the instructions at https://revbayes.github.io/compile-linux.
+RevBayes v1.2.4 (the current version as of September 2024) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set. Executables and source code is available at https://revbayes.github.io/download. Our script to build RevBayes from source on the MeluXina supercomputer are in `config/get-rb.sh` following the instructions at https://revbayes.github.io/compile-linux.
 
 
 **TODO: update everything below.**
@@ -39,37 +39,39 @@ RevBayes v1.2.4 (the current version at the time) was used to generate MCMC samp
 
 ## Analyses
 The `pars.R` file contains settings for the experiments in the form of sequences written as R commands:
-* `n_seq`: number of taxa
-* `m_seq`: mutation rates
-* `k_seq`: number of sites
+* `s_seq`: priors to use ("kingman", "uniform")
+* `n_seq`: number of taxa for which experiments are performed
+* `m_seq`: mutation rates for generating data
+* `k_seq`: number of sites at which to generate data
 * `r_seq`: indices of replicates
 
-Execute `bash all.sh` to generate data, setup config files, run `RevBayes` and plot the output.
+Execute `bash scripts/all.sh` to generate data, setup config files, run `RevBayes` and plot the output.
 The individual steps are described below.
+
+### Generate trees
+```bash
+bash scripts/tree.sh
+```
+
+For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths), the codes starts from a tree with `n = min(n_seq)` taxa and sequentially build trees on `n + 1, ..., max(n_seq)` taxa marginally drawn according to the prior. The trees are written to `trees/` and plotted in `figs/`.
 
 ### Generate data
 ```bash
-bash data.sh
+bash scripts/data.sh
 ```
 
-For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths):
-* Starting from `n = min(n_seq)`, sequentially build trees on `n + 1, ..., max(n_seq)` taxa marginally drawn according to the prior.
-* Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` in `m_seq` and replicate index `r` in `r_seq`.
-
-The trees are written to `t0` and the data to `data/raw`.
+Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` and replicate index `r`.
+The data sets are written to `data/raw` and the data sets with `k` sites for each entry in `k_seq` are written to `data/proc`.
 
 ### Config files
 ```bash
-bash setup.sh
+bash scripts/model.sh
 ```
-For each tree type, number of taxa `n`, mutation rate `m` and replicate index `r`:
-* Construct a data set using the first `k` sites in the corresponding data set with `max(k_seq)` sites and store in `data/proc`.
-* Construct a RevBayes analysis file and write to `run`.
-
+For each tree type, number of taxa `n`, mutation rate `m`, number of sites `k` and replicate index `r`: construct a RevBayes analysis file and write to `run/`.
 
 ### Run experiments
 ```bash
-bash run.sh
+bash scripts/run.sh
 ```
 Run RevBayes on every configuration file in `run` and write the log and sampled trees to `out.`
 
@@ -77,12 +79,12 @@ Edit the templates in the `Rev` directory to change run parameters.
 
 ### Make figures
 ```bash
-bash plot.sh
+bash scripts/plot.sh
 ```
-For each experiment, compute the median posterior support for the corresponding true tree topology in `t0` across replicate data sets then plot it as `k` increases and create a separate plot of the interval for `k` on which the curves cross 0.5.
+For each experiment, compute the median posterior support for the corresponding true tree topology across replicate data sets, then plot it as `k` increases and create a separate plot of the interval for `k` on which the curves cross 0.5.
 A trace plot of the log-likelihood of each sampled MCMC configuration is also created.
 
 ### Notes
-The files created by steps 1–4 can be removed by executing `bash clean.sh`.
+The files created by can be removed by executing `bash scripts/clean.sh`.
 
-If changing `k_seq` in `pars.R`, then you may want to update the axis scales in `R/plot-utilities.R`.
+If changing `k_seq` in `pars.R`, then you may want to update the axis scales in `code/figs/R/plot-utilities.R`.

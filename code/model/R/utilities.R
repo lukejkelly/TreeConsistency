@@ -1,9 +1,9 @@
-# helper functions for writing data and config files
-
-
+# helper functions for writing revbayes config files
 
 write_config <- function(s, n, m, k, r) {
-    template <- readr::read_file(file.path("Rev", "config-template.Rev"))
+    template <- readr::read_file(
+        file.path("code", "model", "Rev", "config-template.Rev")
+    )
     config <- template |>
         stringr::str_replace(
             "_PATH_TO_DATA_",
@@ -15,7 +15,7 @@ write_config <- function(s, n, m, k, r) {
         ) |>
         stringr::str_replace(
             "_PATH_TO_TREE_PRIOR_",
-            file.path("Rev", sprintf("tree-%s.Rev", s))
+            file.path("code", "model", "Rev", sprintf("tree-%s.Rev", s))
         ) |>
         stringr::str_replace(
             "_MUTATION_RATE_",

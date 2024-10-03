@@ -1,7 +1,7 @@
 # run all analysis steps
-bash clean.sh
-bash trees.sh
-bash data.sh
-bash setup.sh
-bash run.sh
-bash plot.sh
+bash scripts/clean.sh
+bash scripts/trees.sh
+bash scripts/data.sh
+bash scripts/setup.sh
+bash scripts/run.sh
+bash scripts/plot.sh

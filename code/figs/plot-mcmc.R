@@ -1,5 +1,5 @@
 source("pars.R")
-source(file.path("R", "plot-utilities.R"))
+source(file.path("code", "figs", "R", "plot-utilities.R"))
 
 s_seq <- c("kingman", "uniform")
 for (s in s_seq) {

@@ -23,6 +23,3 @@ while (n < n_max) {
 
 # plot trees on n_seq tips in figs directory
 plot_tree_sequence(s, n_seq)
-
-# # generate independent data sets for each mutation rate and replication
-# simulate_and_write_alleles(s, n_seq, m_seq, k_seq, r_seq)

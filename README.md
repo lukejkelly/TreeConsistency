@@ -1,13 +1,13 @@
 # Asymptotic guarantees for Bayesian phylogenetic tree reconstruction
-The paper describes criteria for the consistency of Bayesian procedures for reconstructing phylogenetic trees as the number of taxa and sequence length vary. This repository replicates the numerical experiments in the manuscript. The code analyses the posterior support for the true tree topology in various synthetic problems as the tree prior, number of taxa, mutation rate and sequence length vary. Analogous to figures 2 and 3 of the main text, the code plots the posterior support for the true tree topology (averaged across replicate data sets) and the sequence length until the support first exceeds 0.5.
+The paper describes criteria for the consistency of Bayesian procedures for reconstructing phylogenetic trees as the number of taxa and sequence length vary. This repository replicates the numerical experiments in the manuscript. The code analyses the posterior support for the true tree topology in various synthetic problems as the tree prior, number of taxa, mutation rate and sequence length vary. Analogous to figures 2 and 3 of the main text, the code plots the posterior support for the true tree topology (averaged across replicate data sets generated on the same trees) and the sequence length until the support first exceeds 0.5.
 
 ## Setup
 The working directory is the top level of the `TreeConsistency` directory.
 
-The simulations require that the `bash`, `R` and `rb` ([RevBayes](https://revbayes.github.io)) commands are available on the command line.
+The bash scripts require that [R](https://www.r-project.org/) and [RevBayes](https://revbayes.github.io) are installed.
 
 ### R
-R v4.4.1 was used to generate data and analyse MCMC output. The packages required to run the code are:
+R v4.4.1 was used to generate data and analyse MCMC output. The packages used were:
 - TreeTools v1.12.0
 - ape v5.8
 - dplyr v1.1.4
@@ -31,11 +31,9 @@ renv::restore()
 ```
 
 ### RevBayes
-RevBayes v1.2.4 (the current version as of September 2024) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set. Executables and source code is available at https://revbayes.github.io/download. Our script to build RevBayes from source on the MeluXina supercomputer are in `config/get-rb.sh` following the instructions at https://revbayes.github.io/compile-linux.
+RevBayes v1.2.4 (the current version as of September 2024) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set. Executables and source code is available at https://revbayes.github.io/download. Set the `RB` variable in `scripts/run.sh` to point to the location of the RevBayes `rb` executable.
 
-
-**TODO: update everything below.**
-
+Our script to build RevBayes from source on the MeluXina supercomputer are in `config/get-rb.sh` following the instructions at https://revbayes.github.io/compile-linux.
 
 ## Analyses
 The `pars.R` file contains settings for the experiments in the form of sequences written as R commands:
@@ -60,8 +58,7 @@ For each type of tree prior (Kingman coalescent or uniform across topologies wit
 bash scripts/data.sh
 ```
 
-Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` and replicate index `r`.
-The data sets are written to `data/raw` and the data sets with `k` sites for each entry in `k_seq` are written to `data/proc`.
+Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` and replicate index `r`. The data sets are written to `data/raw` and the data sets with `k` sites for each entry in `k_seq` are written to `data/proc`.
 
 ### Config files
 ```bash

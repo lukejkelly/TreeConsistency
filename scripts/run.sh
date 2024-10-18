@@ -1,5 +1,8 @@
+# path to revbayes executable
+RB=/Users/kelly/.bin/rb
+
 # execute revbayes on each run file
 mkdir -p out
 for FILE in run/*; do
-    rb --file $FILE
+    "$RB" --file $FILE
 done

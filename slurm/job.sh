@@ -16,9 +16,9 @@
 # setting up
 cd /project/home/p200482/TreeConsistency
 MODEL_FILE=$( \
-    printf "%s-n%s-m%s-k%s-r%s" "$S" "$N" "$M" "$K" "$SLURM_ARRAY_TASK_ID" \
+    printf "%s-n%s-m%s-k%s-r%s.Rev" "$S" "$N" "$M" "$K" "$SLURM_ARRAY_TASK_ID" \
 )
 
 # run job
 ml Boost
-/project/home/p200482/revbayes/projects/cmake/rb --file run/${MODEL_FILE}.Rev
+/project/home/p200482/revbayes-1.2.4/projects/cmake/rb --file run/${MODEL_FILE}

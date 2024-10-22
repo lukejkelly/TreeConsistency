@@ -16,6 +16,9 @@ salloc -A p200482 --res cpudev -q dev -N 1 -n 1 -c 1 -t 2:0:0
 # compute and memory quotas
 myquota
 
+# sending files
+rsync -ahHSv TreeConsistency meluxina:/project/home/p200482
+
 # modules required to run R v4.4.1
 ml env/staging/2024.1
 ml ICU

@@ -6,6 +6,7 @@ source("../pars.R")
 # template with parts to be replaced
 script_template <- stringr::str_c(
     "#!/bin/bash\n\n",
+    "mkdir out\n\n",
     "for S in _S_SEQ_; do\n",
     stringr::str_dup(" ", 4), "for N in _N_SEQ_; do\n",
     stringr::str_dup(" ", 8), "for M in _M_SEQ_; do\n",
@@ -13,8 +14,8 @@ script_template <- stringr::str_c(
     stringr::str_dup(" ", 16), "sbatch \\\n",
     stringr::str_dup(" ", 20), "--job-name=${S}-${N}-${M}-${K} \\\n",
     stringr::str_dup(" ", 20), "--export=ALL,S=${S},N=${N},M=${M},K=${K} \\\n",
-    stringr::str_dup(" ", 20), "--array _R_MIN_:_R_MAX_%10 \\\n",
-    stringr::str_dup(" ", 20), "--time ${N}:0:0\\\n",
+    stringr::str_dup(" ", 20), "--array=_R_MIN_-_R_MAX_%10 \\\n",
+    stringr::str_dup(" ", 20), "--time=${N}:0:0\\\n",
     stringr::str_dup(" ", 20), "slurm/job.sh\n",
     stringr::str_dup(" ", 12), "done\n",
     stringr::str_dup(" ", 8), "done\n",

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # path to revbayes executable
 RB=/Users/kelly/.bin/rb
 

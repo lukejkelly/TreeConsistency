@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # run all analysis steps
 bash scripts/clean.sh
 bash scripts/trees.sh

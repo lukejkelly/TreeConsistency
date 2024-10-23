@@ -1,7 +1,7 @@
-# R script to generate slurm array job submission script
+# create slurm array job submission script
 
 # setting up
-source("../pars.R")
+source("pars.R")
 
 # template with parts to be replaced
 script_template <- stringr::str_c(
@@ -54,6 +54,5 @@ script_text <-
 # write file in same location
 readr::write_file(
     script_text,
-    # file.path("run", sprintf("%s-n%s-m%s-k%s-r%s.Rev", s, n, m, k, r))
-    "submit.sh"
+    file.path("slurm", "submit.sh")
 )

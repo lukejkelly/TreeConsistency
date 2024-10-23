@@ -14,11 +14,12 @@
 #SBATCH -o out/slurm-%A_%a.log
 
 # setting up
+ml Boost
 cd /project/home/p200482/TreeConsistency
+RB=/project/home/p200482/revbayes-1.2.4/projects/cmake/rb
 MODEL_FILE=$( \
     printf "%s-n%s-m%s-k%s-r%s.Rev" "$S" "$N" "$M" "$K" "$SLURM_ARRAY_TASK_ID" \
 )
 
 # run job
-ml Boost
-/project/home/p200482/revbayes-1.2.4/projects/cmake/rb --file run/${MODEL_FILE}
+$RB --file run/${MODEL_FILE}

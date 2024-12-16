@@ -5,11 +5,12 @@
 
 #SBATCH -A p200482
 #SBATCH -p cpu
-#SBATCH -q dev
+#SBATCH -q default
 
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
+#SBATCH --ntasks-per-node=1
 
 #SBATCH -o /project/home/p200482/get-rb.out
 #SBATCH -t 1:30:00
@@ -21,7 +22,7 @@ cd /project/home/p200482
 wget https://github.com/revbayes/revbayes/archive/refs/tags/v1.2.4.tar.gz
 tar -xvz -f v1.2.4.tar.gz
 
-# build
+# build executable
 cd revbayes-1.2.4/projects/cmake
 ml Boost GCC CMake
 ./build.sh

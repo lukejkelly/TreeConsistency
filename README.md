@@ -53,6 +53,8 @@ bash scripts/tree.sh
 
 For each type of tree prior (Kingman coalescent or uniform across topologies with exponential branch lengths), the codes starts from a tree with `n = min(n_seq)` taxa and sequentially build trees on `n + 1, ..., max(n_seq)` taxa marginally drawn according to the prior. The trees are written to `trees/` and plotted in `figs/`.
 
+The runtime for this step is negligible.
+
 ### Generate data
 ```bash
 bash scripts/data.sh
@@ -60,19 +62,24 @@ bash scripts/data.sh
 
 Sample data at `max(k_seq)` sites under a Jukes—Cantor model for each tree, mutation rate `mu` and replicate index `r`. The data sets are written to `data/raw` and the data sets with `k` sites for each entry in `k_seq` are written to `data/proc`.
 
+For the experiments in the paper, this step took approximately 4 hours of CPU time.
+
 ### Config files
 ```bash
 bash scripts/model.sh
 ```
 For each tree type, number of taxa `n`, mutation rate `m`, number of sites `k` and replicate index `r`: construct a RevBayes analysis file and write to `run/`.
 
+The runtime for this step is negligible.
+
 ### Run experiments
 ```bash
 bash scripts/run.sh
 ```
 Run RevBayes on every configuration file in `run` and write the log and sampled trees to `out.`
-
 Edit the templates in the `Rev` directory to change run parameters.
+
+For the experiments in the paper, this step took approximately [...] hours of CPU time.
 
 ### Make figures
 ```bash

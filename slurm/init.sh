@@ -10,9 +10,9 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
+#SBATCH --ntasks-per-node=1
 
 #SBATCH -o slurm-init.log
-
 #SBATCH --time=24:0:0
 
 # setting up
@@ -27,4 +27,3 @@ cd /project/home/p200482/TreeConsistency
 bash scripts/trees.sh &&
 bash scripts/data.sh &&
 bash scripts/model.sh
-

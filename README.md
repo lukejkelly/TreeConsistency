@@ -21,7 +21,7 @@ R v4.4.1 was used to generate data and analyse MCMC output. The packages used we
 - stringr v1.5.1
 - tidyr v1.3.1
 
-The `renv` package was used to create a virtual environment with the above packages and their dependences. The package environment can be restored by starting `R` from the top-level of the repository and executing:
+The `renv` package was used to create a virtual environment with the above packages and their dependences. The package environment is restored by starting `R` from the top-level of the repository and executing:
 ```R
 renv::restore()
 ```

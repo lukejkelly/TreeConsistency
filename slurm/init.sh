@@ -13,7 +13,7 @@
 #SBATCH --ntasks-per-node=1
 
 #SBATCH -o slurm-init.log
-#SBATCH --time=24:0:0
+#SBATCH --time=8:0:0
 
 # setting up
 ml env/staging/2024.1

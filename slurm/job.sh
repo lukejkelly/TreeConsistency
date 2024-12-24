@@ -22,7 +22,7 @@ RB=/project/home/p200482/revbayes-1.2.4/projects/cmake/rb
 
 for S in kingman uniform; do
     for N in 4 7 10 13 16; do
-        for M in 0.0125 0.025 0.05 0.1; do
+        for M in 0.0125 0.025 0.05 0.1 0.2; do
             for K in 1 10 100 1000 10000 1e+05; do
                 MODEL_FILE=$( \
                     printf "%s-n%s-m%s-k%s-r%s.Rev" "$S" "$N" "$M" "$K" "$SLURM_ARRAY_TASK_ID" \

@@ -5,11 +5,10 @@ s_seq <- c("kingman", "uniform")
 n_seq <- seq.int(4, 16, 3)
 
 # sequence of mutation rates m
-m_seq <- c(0.0125, 0.025, 0.05, 0.1)
+m_seq <- c(0.0125, 0.025, 0.05, 0.1, 0.2)
 
 # sequence of site counts k
 k_seq <- 10^seq.int(0, 5)
 
 # replication indices
 r_seq <- seq_len(100)
-

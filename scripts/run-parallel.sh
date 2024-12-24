@@ -13,8 +13,7 @@ for S in kingman uniform; do
                     MODEL_FILE=$( \
                         printf "%s-n%s-m%s-k%s-r%s.Rev" "$S" "$N" "$M" "$K" "$R" \
                     )
-                    # $RB --file run/${MODEL_FILE}
-                    echo $MODEL_FILE
+                    $RB --file run/${MODEL_FILE}
                 done
             done
         done &> log/${S}-${M}.log &

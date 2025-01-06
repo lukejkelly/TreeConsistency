@@ -9,7 +9,7 @@ The working directory is the top level of the `TreeConsistency/` directory.
 The code runs on Mac/Linux using bash, [R](https://www.r-project.org/) and [RevBayes](https://revbayes.github.io).
 
 ### R
-R v4.4.2 was used to generate trees and sequence data then analyse the RevBayes MCMC output.
+R version 4.4.2 was used to generate trees and sequence data and to analyse the MCMC output.
 The code uses the following packages:
 - TreeTools v1.12.0
 - ape v5.8
@@ -35,7 +35,7 @@ You may need to first install `renv` via `install.packages("renv")`.
 The bash scripts in `scripts/` assume that the `R` command is available from the terminal; if not, then you will need to update the files in `scripts/` to point to your installation.
 
 ### RevBayes
-RevBayes v1.2.4 (the current version as of September 2024) was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set.
+RevBayes version 1.2.2 was used to generate MCMC samples targeting the posterior distribution on trees for each model and data set.
 Executables and source code are available at https://revbayes.github.io/download.
 Set the `RB` variable in `scripts/run.sh` to point to the location of the RevBayes `rb` executable on your machine.
 

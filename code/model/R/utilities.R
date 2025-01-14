@@ -1,6 +1,11 @@
 # helper functions for writing revbayes config files
 
 write_config <- function(s, n, m, k, r) {
+    # s: type of tree is either "kingman" if coalescent or "uniform" if unrooted
+    # n: number of leaves
+    # m: mutation rate in JC69 model used to generate data
+    # k: number of sites at which alleles were generated
+    # r: replication index
     template <- readr::read_file(
         file.path("code", "model", "Rev", "config-template.Rev")
     )

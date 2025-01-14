@@ -1,7 +1,10 @@
+# rb
 history.txt
 
-t0/
-data/
-run/
-out/
-figs/
+# directories generated in experiments
+/trees/
+/data/
+/run/
+/out/
+/figs/
+/log/
